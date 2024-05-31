@@ -1,6 +1,13 @@
 package com.app.ClinicaMedica.Doctor;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table
 public class Doctor {
+    @Id
     private String Crm;
     private String DoctorName;
     private String DoctorPhone;
