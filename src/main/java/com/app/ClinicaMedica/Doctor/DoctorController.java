@@ -1,23 +1,43 @@
 package com.app.ClinicaMedica.Doctor;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/doctors")
 public class DoctorController {
+
+    private final DoctorService doctorService;
+
+    @Autowired
+    public DoctorController(DoctorService doctorService) {
+        this.doctorService = doctorService;
+    }
+
     @GetMapping
-    public List<Doctor> hello() {
-        return List.of(
-                new Doctor(
-                        "101021",
-                        "Guilherme Campos",
-                        "11953220101",
-                        0.25F
-                )
-        );
+    public List<Doctor> getDoctors() {
+        return doctorService.getDoctors();
+    }
+
+    @PostMapping
+    public void registerDoctor(@Valid @RequestBody DoctorDto doctorDTO) {
+        doctorService.addNewDoctor(doctorDTO);
+    }
+
+    @PatchMapping(path = "{crm}")
+    public ResponseEntity<String> updateDoctor(
+            @PathVariable("crm") String crm,
+            @Valid @RequestBody DoctorDto doctorDto
+    ) {
+         try {
+            doctorService.updateDoctor(crm, doctorDto);
+            return ResponseEntity.ok("Doctor updated successfully");
+        } catch (IllegalStateException e) {
+             return ResponseEntity.badRequest().body(e.getMessage());
+          }
     }
 }

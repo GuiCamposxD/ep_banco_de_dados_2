@@ -3,70 +3,81 @@ package com.app.ClinicaMedica.Doctor;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table
 public class Doctor {
     @Id
-    private String Crm;
-    private String DoctorName;
-    private String DoctorPhone;
-    private Float Percentage;
+    private String crm;
+
+    @NotEmpty(message = "Doctor Name may not be empty")
+    private String doctorName;
+
+    @NotEmpty(message = "Doctor Phone may not be empty")
+    private String doctorPhone;
+
+    @Positive(message = "Percentage must be a positive number")
+    @NotNull(message = "Percentage may not be empty")
+    private Float percentage;
 
     public Doctor() {}
 
     public Doctor(String crm, String doctorName, String doctorPhone, Float percentage) {
-        Crm = crm;
-        DoctorName = doctorName;
-        DoctorPhone = doctorPhone;
-        Percentage = percentage;
+        crm = crm;
+        doctorName = doctorName;
+        doctorPhone = doctorPhone;
+        percentage = percentage;
     }
 
     public Doctor(String doctorName, String doctorPhone, Float percentage) {
-        DoctorName = doctorName;
-        DoctorPhone = doctorPhone;
-        Percentage = percentage;
+        doctorName = doctorName;
+        doctorPhone = doctorPhone;
+        percentage = percentage;
     }
 
     public String getCrm() {
-        return Crm;
+        return crm;
     }
 
     public void setCrm(String crm) {
-        Crm = crm;
+        this.crm = crm;
     }
 
     public String getDoctorName() {
-        return DoctorName;
+        return doctorName;
     }
 
     public void setDoctorName(String doctorName) {
-        DoctorName = doctorName;
+        this.doctorName = doctorName;
     }
 
     public String getDoctorPhone() {
-        return DoctorPhone;
+        return doctorPhone;
     }
 
     public void setDoctorPhone(String doctorPhone) {
-        DoctorPhone = doctorPhone;
+        this.doctorPhone = doctorPhone;
     }
 
     public Float getPercentage() {
-        return Percentage;
+        return percentage;
     }
 
     public void setPercentage(Float percentage) {
-        Percentage = percentage;
+        this.percentage = percentage;
     }
 
     @Override
     public String toString() {
         return "Doctor{" +
-                "Crm='" + Crm + '\'' +
-                ", DoctorName='" + DoctorName + '\'' +
-                ", DoctorPhone='" + DoctorPhone + '\'' +
-                ", Percentage=" + Percentage +
+                "crm='" + crm + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", doctorPhone='" + doctorPhone + '\'' +
+                ", percentage=" + percentage +
                 '}';
     }
 }
