@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/doctors")
 public class DoctorController {
-
     private final DoctorService doctorService;
 
     @Autowired
@@ -19,25 +18,39 @@ public class DoctorController {
     }
 
     @GetMapping
-    public List<Doctor> getDoctors() {
-        return doctorService.getDoctors();
+    public List<DoctorDTO> getDoctors() {
+        List<Doctor> doctors = doctorService.getDoctors();
+        return DoctorDTO.converter(doctors);
     }
 
     @PostMapping
-    public void registerDoctor(@Valid @RequestBody DoctorDto doctorDTO) {
-        doctorService.addNewDoctor(doctorDTO);
+    public ResponseEntity<DoctorDTO> registerDoctor(@Valid @RequestBody DoctorCreateDTO form) {
+        DoctorDTO newDoctor = doctorService.addNewDoctor(form);
+        return ResponseEntity.ok(newDoctor);
     }
 
     @PatchMapping(path = "{crm}")
-    public ResponseEntity<String> updateDoctor(
+    public ResponseEntity<?> updateDoctor(
             @PathVariable("crm") String crm,
-            @Valid @RequestBody DoctorDto doctorDto
+            @Valid @RequestBody DoctorUpdateDTO doctorUpdateDTO
     ) {
          try {
-            doctorService.updateDoctor(crm, doctorDto);
-            return ResponseEntity.ok("Doctor updated successfully");
+            DoctorDTO updatedDoctor = doctorService.updateDoctor(crm, doctorUpdateDTO);
+            return ResponseEntity.ok(updatedDoctor);
         } catch (IllegalStateException e) {
              return ResponseEntity.badRequest().body(e.getMessage());
           }
+    }
+
+    @DeleteMapping(path = "{crm}")
+    public ResponseEntity<?> deleteDoctor(
+            @PathVariable("crm") String crm
+    ) {
+        try {
+            DoctorDTO deletedDoctor = doctorService.deleteDoctor(crm);
+            return ResponseEntity.ok(deletedDoctor);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

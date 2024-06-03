@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Doctor;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +19,33 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
-    public void addNewDoctor(DoctorDto doctorDto) {
-        Doctor doctor = new Doctor();
-
-        doctor.setCrm(doctorDto.getCrm());
-        doctor.setDoctorName(doctorDto.getDoctorName());
-        doctor.setDoctorPhone(doctorDto.getDoctorPhone());
-        doctor.setPercentage(doctorDto.getPercentage());
-
+    @Transactional
+    public DoctorDTO addNewDoctor(DoctorCreateDTO form) {
+        Doctor doctor = form.converter();
         doctorRepository.save(doctor);
+        return new DoctorDTO(doctor);
     }
 
-    public void updateDoctor(String crm, DoctorDto doctorDto) {
-        Doctor existingDoctor = doctorRepository.findByCrm(crm).orElseThrow(
+    @Transactional
+    public DoctorDTO updateDoctor(String crm, DoctorUpdateDTO form) {
+        Doctor doctor = doctorRepository.findByCrm(crm).orElseThrow(
+            () -> new IllegalStateException("Doctor with this " + crm + " CRM does not exists")
+        );
+
+        form.update(doctor);
+        doctorRepository.save(doctor);
+
+        return new DoctorDTO(doctor);
+    }
+
+    @Transactional
+    public DoctorDTO deleteDoctor(String crm) {
+        Doctor doctor = doctorRepository.findByCrm(crm).orElseThrow(
                 () -> new IllegalStateException("Doctor with this " + crm + " CRM does not exists")
         );
 
-        existingDoctor.setDoctorName(doctorDto.getDoctorName());
-        existingDoctor.setDoctorPhone(doctorDto.getDoctorPhone());
-        existingDoctor.setPercentage(doctorDto.getPercentage());
+        doctorRepository.deleteByCrm(crm);
 
-        doctorRepository.save(existingDoctor);
+        return new DoctorDTO(doctor);
     }
 }
