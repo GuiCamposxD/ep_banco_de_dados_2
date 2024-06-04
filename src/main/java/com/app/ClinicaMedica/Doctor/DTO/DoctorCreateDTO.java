@@ -1,5 +1,6 @@
-package com.app.ClinicaMedica.Doctor;
+package com.app.ClinicaMedica.Doctor.DTO;
 
+import com.app.ClinicaMedica.Doctor.Doctor;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -8,7 +9,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class DoctorUpdateDTO {
+public class DoctorCreateDTO {
+    @NotEmpty(message = "CRM is mandatory")
+    private String crm;
+
     @NotEmpty(message = "Doctor name is mandatory")
     private String doctorName;
 
@@ -19,9 +23,13 @@ public class DoctorUpdateDTO {
     @Positive(message = "Percentage must be a positive number")
     private Float percentage;
 
-    public void update(Doctor doctor) {
-        doctor.setDoctorName(doctor.getDoctorName());
-        doctor.setDoctorPhone(doctor.getDoctorPhone());
-        doctor.setPercentage(doctor.getPercentage());
+    public Doctor converter() {
+        Doctor doctor = new Doctor();
+        doctor.setCrm(this.crm);
+        doctor.setDoctorName(this.doctorName);
+        doctor.setDoctorPhone(this.doctorPhone);
+        doctor.setPercentage(this.percentage);
+
+        return doctor;
     }
 }

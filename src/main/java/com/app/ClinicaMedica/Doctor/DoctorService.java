@@ -1,5 +1,8 @@
 package com.app.ClinicaMedica.Doctor;
 
+import com.app.ClinicaMedica.Doctor.DTO.DoctorCreateDTO;
+import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
+import com.app.ClinicaMedica.Doctor.DTO.DoctorUpdateDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,9 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    public List<Doctor> getDoctors() {
-        return doctorRepository.findAll();
+    public List<DoctorDTO> getDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        return DoctorDTO.converter(doctors);
     }
 
     @Transactional

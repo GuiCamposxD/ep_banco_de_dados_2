@@ -1,11 +1,14 @@
 package com.app.ClinicaMedica.Doctor;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.app.ClinicaMedica.Schedule.Schedule;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,4 +29,8 @@ public class Doctor {
     @Positive
     @NotNull
     private Float percentage;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Schedule> schedules;
 }

@@ -1,5 +1,8 @@
 package com.app.ClinicaMedica.Doctor;
 
+import com.app.ClinicaMedica.Doctor.DTO.DoctorCreateDTO;
+import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
+import com.app.ClinicaMedica.Doctor.DTO.DoctorUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +21,8 @@ public class DoctorController {
     }
 
     @GetMapping
-    public List<DoctorDTO> getDoctors() {
-        List<Doctor> doctors = doctorService.getDoctors();
-        return DoctorDTO.converter(doctors);
+    public ResponseEntity<List<DoctorDTO>> getDoctors() {
+        return ResponseEntity.ok(doctorService.getDoctors());
     }
 
     @PostMapping

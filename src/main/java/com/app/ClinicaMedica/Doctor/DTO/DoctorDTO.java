@@ -1,14 +1,16 @@
-package com.app.ClinicaMedica.Doctor;
+package com.app.ClinicaMedica.Doctor.DTO;
 
+import com.app.ClinicaMedica.Doctor.Doctor;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
-@AllArgsConstructor
-public class DoctorCreateDTO {
+public class DoctorDTO {
     @NotEmpty(message = "CRM is mandatory")
     private String crm;
 
@@ -22,13 +24,14 @@ public class DoctorCreateDTO {
     @Positive(message = "Percentage must be a positive number")
     private Float percentage;
 
-    public Doctor converter() {
-        Doctor doctor = new Doctor();
-        doctor.setCrm(this.crm);
-        doctor.setDoctorName(this.doctorName);
-        doctor.setDoctorPhone(this.doctorPhone);
-        doctor.setPercentage(this.percentage);
-
-        return doctor;
+    public DoctorDTO(Doctor doctor) {
+        this.crm = doctor.getCrm();
+        this.doctorName = doctor.getDoctorName();
+        this.doctorPhone = doctor.getDoctorPhone();
+        this.percentage = doctor.getPercentage();
     }
- }
+
+    public static List<DoctorDTO> converter(List<Doctor> doctors) {
+        return doctors.stream().map(DoctorDTO::new).collect(Collectors.toList());
+    }
+}

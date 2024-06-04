@@ -8,11 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-    @Query("SELECT d FROM Doctor d WHERE d.crm = ?1")
+public interface DoctorRepository extends JpaRepository<Doctor, String> {
     Optional<Doctor> findByCrm(String crm);
 
     @Modifying
-    @Query("DELETE FROM Doctor d WHERE d.crm = ?1")
     void deleteByCrm(String crm);
 }
