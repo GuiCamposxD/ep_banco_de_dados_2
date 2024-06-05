@@ -33,7 +33,7 @@ public class Schedule {
     private LocalTime endHour;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crm", referencedColumnName = "crm",nullable = false)
+    @JoinColumn(name = "crm", referencedColumnName = "crm", nullable = false)
     @JsonBackReference
     private Doctor doctor;
 }

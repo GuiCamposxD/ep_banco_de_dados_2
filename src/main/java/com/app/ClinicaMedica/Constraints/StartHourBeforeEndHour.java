@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StartHourBeforeEndHour {
-    String message() default "Start hour must be before End Hour";
+    String message() default "Start Hour must be before End Hour";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

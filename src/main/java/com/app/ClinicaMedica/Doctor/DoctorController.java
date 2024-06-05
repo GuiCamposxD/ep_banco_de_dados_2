@@ -27,18 +27,16 @@ public class DoctorController {
 
     @PostMapping
     public ResponseEntity<DoctorDTO> registerDoctor(@Valid @RequestBody DoctorCreateDTO form) {
-        DoctorDTO newDoctor = doctorService.addNewDoctor(form);
-        return ResponseEntity.ok(newDoctor);
+        return ResponseEntity.ok(doctorService.addNewDoctor(form));
     }
 
     @PatchMapping(path = "{crm}")
     public ResponseEntity<?> updateDoctor(
             @PathVariable("crm") String crm,
-            @Valid @RequestBody DoctorUpdateDTO doctorUpdateDTO
+            @Valid @RequestBody DoctorUpdateDTO updateForm
     ) {
          try {
-            DoctorDTO updatedDoctor = doctorService.updateDoctor(crm, doctorUpdateDTO);
-            return ResponseEntity.ok(updatedDoctor);
+            return ResponseEntity.ok(doctorService.updateDoctor(crm, updateForm));
         } catch (IllegalStateException e) {
              return ResponseEntity.badRequest().body(e.getMessage());
           }
@@ -49,8 +47,7 @@ public class DoctorController {
             @PathVariable("crm") String crm
     ) {
         try {
-            DoctorDTO deletedDoctor = doctorService.deleteDoctor(crm);
-            return ResponseEntity.ok(deletedDoctor);
+            return ResponseEntity.ok(doctorService.deleteDoctor(crm));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

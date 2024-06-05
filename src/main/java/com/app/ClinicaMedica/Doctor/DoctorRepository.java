@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     Optional<Doctor> findByCrm(String crm);
-
     @Modifying
     void deleteByCrm(String crm);
 }
