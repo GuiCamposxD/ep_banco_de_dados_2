@@ -26,8 +26,7 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleDTO> addNewSchedule(@RequestBody ScheduleCreateDTO form) {
-        ScheduleDTO schedule = scheduleService.addNewSchedule(form);
-        return ResponseEntity.ok(schedule);
+        return ResponseEntity.ok(scheduleService.addNewSchedule(form));
     }
 
     @PatchMapping(path = "{scheduleId}")
