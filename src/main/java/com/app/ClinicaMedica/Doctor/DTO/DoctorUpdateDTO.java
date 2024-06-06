@@ -22,8 +22,8 @@ public class DoctorUpdateDTO {
     private Float percentage;
 
     public void update(Doctor doctor) {
-        doctor.setDoctorName(doctor.getDoctorName());
-        doctor.setDoctorPhone(doctor.getDoctorPhone());
-        doctor.setPercentage(doctor.getPercentage());
+        doctor.setDoctorName(this.getDoctorName());
+        doctor.setDoctorPhone(this.getDoctorPhone());
+        doctor.setPercentage(this.getPercentage());
     }
 }

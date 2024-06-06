@@ -19,8 +19,7 @@ public class DoctorService {
     }
 
     public List<DoctorDTO> getDoctors() {
-        List<Doctor> doctors = doctorRepository.findAll();
-        return DoctorDTO.converter(doctors);
+        return DoctorDTO.converter(doctorRepository.findAll());
     }
 
     @Transactional

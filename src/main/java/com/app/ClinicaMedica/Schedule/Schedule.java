@@ -18,8 +18,7 @@ import java.time.LocalTime;
 @StartHourBeforeEndHour
 public class Schedule {
     @Id
-    @GeneratedValue(strategy=GenerationType.UUID, generator="schedule_sequence")
-    @SequenceGenerator(name="schedule_sequence", sequenceName="sch_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long idSchedule;
 
     @NotNull

@@ -35,11 +35,11 @@ public class DoctorController {
             @PathVariable("crm") String crm,
             @Valid @RequestBody DoctorUpdateDTO updateForm
     ) {
-         try {
+        try {
             return ResponseEntity.ok(doctorService.updateDoctor(crm, updateForm));
         } catch (IllegalStateException e) {
              return ResponseEntity.badRequest().body(e.getMessage());
-          }
+        }
     }
 
     @DeleteMapping(path = "{crm}")

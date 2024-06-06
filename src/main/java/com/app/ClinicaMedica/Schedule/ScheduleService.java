@@ -52,6 +52,7 @@ public class ScheduleService {
         return new ScheduleDTO(schedule);
     }
 
+    @Transactional
     public ScheduleDTO deleteSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findByIdSchedule(scheduleId)
                 .orElseThrow(() -> new IllegalStateException("Schedule with Schedule Id " + scheduleId + " does not exist"));

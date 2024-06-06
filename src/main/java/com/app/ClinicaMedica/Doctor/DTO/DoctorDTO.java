@@ -12,17 +12,17 @@ import java.util.stream.Collectors;
 @Getter
 public class DoctorDTO {
     @NotEmpty(message = "CRM is mandatory")
-    private String crm;
+    private final String crm;
 
     @NotEmpty(message = "Doctor name is mandatory")
-    private String doctorName;
+    private final String doctorName;
 
     @NotEmpty(message = "Doctor phone is mandatory")
-    private String doctorPhone;
+    private final String doctorPhone;
 
     @NotNull(message = "Percentage is mandatory")
     @Positive(message = "Percentage must be a positive number")
-    private Float percentage;
+    private final Float percentage;
 
     public DoctorDTO(Doctor doctor) {
         this.crm = doctor.getCrm();

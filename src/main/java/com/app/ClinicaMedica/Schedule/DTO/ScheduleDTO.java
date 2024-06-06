@@ -14,19 +14,19 @@ import java.util.stream.Collectors;
 @Getter
 public class ScheduleDTO {
     @NotEmpty(message = "Schedule id is mandatory")
-    private Long idSchedule;
+    private final Long idSchedule;
 
     @NotEmpty(message = "Week Day is mandatory")
-    private WeekDays weekDay;
+    private final WeekDays weekDay;
 
     @NotEmpty(message = "Start Hour is mandatory")
-    private LocalTime startHour;
+    private final LocalTime startHour;
 
     @NotEmpty(message = "End Hour is mandatory")
-    private LocalTime endHour;
+    private final LocalTime endHour;
 
     @NotEmpty(message = "Doctor is mandatory")
-    private DoctorDTO doctor;
+    private final DoctorDTO doctor;
 
     public ScheduleDTO(Schedule schedule) {
         this.idSchedule = schedule.getIdSchedule();
