@@ -25,7 +25,7 @@ public class Diagnostic {
     private String observations;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idAppointment", referencedColumnName = "idAppointment", nullable = false)
+    @JoinColumn(name = "id_appointment", referencedColumnName = "id_appointment", nullable = false)
     private Appointment appointment;
 
     @OneToMany(mappedBy = "diagnostic", cascade = CascadeType.ALL, orphanRemoval = true)
