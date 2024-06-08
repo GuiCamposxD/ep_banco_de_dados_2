@@ -17,11 +17,11 @@ public class Diagnose {
 
     @ManyToOne
     @MapsId("idDiagnostic")
-    @JoinColumn(name = "id_diagnostic", referencedColumnName = "id_diagnostic", nullable = false)
+    @JoinColumn(name = "idDiagnostic", referencedColumnName = "idDiagnostic", nullable = false)
     private Diagnostic diagnostic;
 
     @ManyToOne
     @MapsId("idDisease")
-    @JoinColumn(name = "id_disease", referencedColumnName = "id_disease", nullable = false)
+    @JoinColumn(name = "idDisease", referencedColumnName = "idDisease", nullable = false)
     private Disease disease;
 }
