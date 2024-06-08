@@ -1,4 +1,4 @@
-package com.app.ClinicaMedica.Enum;
+package Enum;
 
 public enum WeekDays {
     MONDAY,

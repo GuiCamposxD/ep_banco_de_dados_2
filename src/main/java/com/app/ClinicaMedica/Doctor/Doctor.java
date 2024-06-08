@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Doctor;
 
+import com.app.ClinicaMedica.Appointment.Appointment;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpeciality;
 import com.app.ClinicaMedica.Schedule.Schedule;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -39,5 +40,8 @@ public class Doctor {
     private List<Schedule> schedules;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<ExertSpeciality> exertSpecialities;
+    private Set<ExertSpeciality> exertSpecialities;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Appointment> appointments;
 }

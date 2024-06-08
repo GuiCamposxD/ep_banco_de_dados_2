@@ -1,10 +1,10 @@
 package com.app.ClinicaMedica.Schedule.DTO;
 
 import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
-import com.app.ClinicaMedica.Doctor.Doctor;
-import com.app.ClinicaMedica.Enum.WeekDays;
+import Enum.WeekDays;
 import com.app.ClinicaMedica.Schedule.Schedule;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalTime;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ScheduleDTO {
-    @NotEmpty(message = "Schedule id is mandatory")
+    @NotNull(message = "Schedule id is mandatory")
     private final Long idSchedule;
 
     @NotEmpty(message = "Week Day is mandatory")
@@ -25,7 +25,7 @@ public class ScheduleDTO {
     @NotEmpty(message = "End Hour is mandatory")
     private final LocalTime endHour;
 
-    @NotEmpty(message = "Doctor is mandatory")
+    @NotNull(message = "Doctor is mandatory")
     private final DoctorDTO doctor;
 
     public ScheduleDTO(Schedule schedule) {

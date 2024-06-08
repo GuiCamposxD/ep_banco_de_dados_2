@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Speciality;
 
+import com.app.ClinicaMedica.Appointment.Appointment;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpeciality;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,4 +30,7 @@ public class Speciality {
 
     @OneToMany(mappedBy = "speciality", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<ExertSpeciality> exertSpecialities;
+
+    @OneToMany(mappedBy = "speciality", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Appointment> appointments;
 }

@@ -1,8 +1,7 @@
 package com.app.ClinicaMedica.Schedule.DTO;
 
-import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
 import com.app.ClinicaMedica.Doctor.Doctor;
-import com.app.ClinicaMedica.Enum.WeekDays;
+import Enum.WeekDays;
 import com.app.ClinicaMedica.Schedule.Schedule;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

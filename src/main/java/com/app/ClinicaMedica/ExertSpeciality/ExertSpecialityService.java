@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.ExertSpeciality;
 
+import Util.FetchEntity;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.app.ClinicaMedica.Doctor.DoctorRepository;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
@@ -38,37 +39,30 @@ public class ExertSpecialityService {
     public ExertSpecialityDTO addNewExertSpeciality(
         ExertSpecialityCreateDTO form
     ) {
-        Doctor doctor = doctorRepository.findById(form.getCrm())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + form.getCrm() + " does not exist"));
-
-        Speciality speciality = specialityRepository.findById(form.getIdSpeciality())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + form.getCrm() + " does not exist"));
+        Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
+        Speciality speciality = FetchEntity.fetchEntity(form.getIdSpeciality(), this.specialityRepository, "Speciality");
 
         ExertSpeciality exertSpeciality = form.converter(doctor, speciality);
         this.exertSpecialityRepository.save(exertSpeciality);
+
         return new ExertSpecialityDTO(exertSpeciality);
     }
 
     @Transactional
     public ExertSpecialityDTO updateExertSpeciality(String crm, Long idSpeciality, ExertSpecialityUpdateDTO form) {
-        ExertSpeciality exertSpeciality = exertSpecialityRepository.findById(new ExertSpecialityId(crm, idSpeciality))
-                .orElseThrow(() -> new IllegalStateException("ExertSpeciality with CRM " + crm + " and Speciality ID " + idSpeciality + " does not exist"));
-
-        Doctor doctor = doctorRepository.findById(form.getCrm())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + form.getCrm() + " does not exist"));
-
-        Speciality speciality = specialityRepository.findById(form.getIdSpeciality())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + form.getCrm() + " does not exist"));
+        ExertSpeciality exertSpeciality = FetchEntity.fetchEntity(crm, idSpeciality, this.exertSpecialityRepository);
+        Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
+        Speciality speciality = FetchEntity.fetchEntity(form.getIdSpeciality(), this.specialityRepository, "Speciality");
 
         form.update(exertSpeciality, doctor, speciality);
-        exertSpecialityRepository.save(exertSpeciality);
+        this.exertSpecialityRepository.save(exertSpeciality);
+
         return new ExertSpecialityDTO(exertSpeciality);
     }
 
     @Transactional
     public ExertSpecialityDTO deleteExertSpeciality(String crm, Long idSpeciality) {
-        ExertSpeciality exertSpeciality = exertSpecialityRepository.findById(new ExertSpecialityId(crm, idSpeciality))
-                .orElseThrow(() -> new IllegalStateException("ExertSpeciality with CRM " + crm + " and Speciality ID " + idSpeciality + " does not exist"));
+        ExertSpeciality exertSpeciality = FetchEntity.fetchEntity(crm, idSpeciality, this.exertSpecialityRepository);
 
         exertSpecialityRepository.delete(exertSpeciality);
 

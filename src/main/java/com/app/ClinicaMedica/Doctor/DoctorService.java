@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Doctor;
 
+import Util.FetchEntity;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorCreateDTO;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorUpdateDTO;
@@ -31,9 +32,7 @@ public class DoctorService {
 
     @Transactional
     public DoctorDTO updateDoctor(String crm, DoctorUpdateDTO form) {
-        Doctor doctor = doctorRepository.findByCrm(crm).orElseThrow(
-            () -> new IllegalStateException("Doctor with this " + crm + " CRM does not exists")
-        );
+        Doctor doctor = FetchEntity.fetchEntity(crm, this.doctorRepository);
 
         form.update(doctor);
         doctorRepository.save(doctor);
@@ -43,9 +42,7 @@ public class DoctorService {
 
     @Transactional
     public DoctorDTO deleteDoctor(String crm) {
-        Doctor doctor = doctorRepository.findByCrm(crm).orElseThrow(
-                () -> new IllegalStateException("Doctor with this " + crm + " CRM does not exists")
-        );
+        Doctor doctor = FetchEntity.fetchEntity(crm, this.doctorRepository);
 
         doctorRepository.deleteByCrm(crm);
 

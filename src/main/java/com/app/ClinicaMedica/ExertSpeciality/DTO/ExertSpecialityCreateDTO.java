@@ -19,7 +19,7 @@ public class ExertSpecialityCreateDTO {
     private Long idSpeciality;
 
     public ExertSpeciality converter(Doctor doctor, Speciality speciality) {
-        ExertSpecialityId id = new ExertSpecialityId(crm, idSpeciality);
+        ExertSpecialityId id = new ExertSpecialityId(this.crm, this.idSpeciality);
 
         return new ExertSpeciality(id, doctor, speciality);
     }

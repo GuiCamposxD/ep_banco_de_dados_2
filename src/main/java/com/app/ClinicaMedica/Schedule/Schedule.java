@@ -1,12 +1,15 @@
 package com.app.ClinicaMedica.Schedule;
 
+import Enum.WeekDays;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Doctor.Doctor;
-import com.app.ClinicaMedica.Enum.WeekDays;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalTime;
 

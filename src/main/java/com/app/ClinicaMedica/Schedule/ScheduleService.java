@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Schedule;
 
+import Util.FetchEntity;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.app.ClinicaMedica.Doctor.DoctorRepository;
 import com.app.ClinicaMedica.Schedule.DTO.ScheduleCreateDTO;
@@ -23,14 +24,12 @@ public class ScheduleService {
     }
 
     public List<ScheduleDTO> getSchedulesByCrm(String crm) {
-        List<Schedule> schedules = scheduleRepository.findByDoctorCrm(crm);
-        return ScheduleDTO.converter(schedules);
+        return ScheduleDTO.converter(scheduleRepository.findByDoctorCrm(crm));
     }
 
     @Transactional
     public ScheduleDTO addNewSchedule(ScheduleCreateDTO form) {
-        Doctor doctor = doctorRepository.findById(form.getCrm())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + form.getCrm() + " does not exist"));
+        Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
 
         Schedule schedule = form.converter(doctor);
         scheduleRepository.save(schedule);
@@ -39,13 +38,8 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleDTO updateSchedule(Long scheduleId, ScheduleUpdateDTO updateForm) {
-        Schedule schedule = scheduleRepository.findByIdSchedule(scheduleId)
-                .orElseThrow(() -> new IllegalStateException("Schedule with Schedule Id " + scheduleId + " does not exist"));
-
-        System.out.println(updateForm);
-
-        Doctor doctor = doctorRepository.findById(updateForm.getCrm())
-                .orElseThrow(() -> new IllegalStateException("Doctor with CRM " + updateForm.getCrm() + " does not exist"));
+        Schedule schedule = FetchEntity.fetchEntity(scheduleId, this.scheduleRepository, "Schedule");
+        Doctor doctor = FetchEntity.fetchEntity(updateForm.getCrm(), this.doctorRepository);
 
         updateForm.update(schedule, doctor);
 
@@ -54,8 +48,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleDTO deleteSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findByIdSchedule(scheduleId)
-                .orElseThrow(() -> new IllegalStateException("Schedule with Schedule Id " + scheduleId + " does not exist"));
+        Schedule schedule = FetchEntity.fetchEntity(scheduleId, this.scheduleRepository, "Schedule");
 
         scheduleRepository.deleteById(scheduleId);
 
