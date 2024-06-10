@@ -3,128 +3,90 @@
     class="mt-5"
   >
     <v-row
-      justify="space-around"
+      justify="center"
     >
       <v-col
         cols="auto"
-        class="configuration__container"
       >
-        <v-row
-          class="px-5"
+        <v-card
+          color="#18435A"
+          class="pa-5"
+          elevation="3"
+          height="500"
+          width="350"
         >
-          <v-col
-            cols="auto"
-          >
-            <h2>Configurações</h2>
-          </v-col>
-        </v-row>
-
-        <v-row
-          v-for="option in configurationOptions"
-          :key="option.title"
-          class="px-5"
-        >
-          <v-col>
-            <v-btn
-              variant="outlined"
-              @click="handleConfigurationOpenModalCall(option.title)"
+          <v-row
+            class="px-5"
             >
-              {{ option.title }}
-            </v-btn>
-          </v-col>
-        </v-row>
+              <v-col>
+                <h2
+                  class="text-center"
+                >
+                  Cadastro
+                </h2>
+              </v-col>
+            </v-row>
+
+            <v-row
+              v-for="option in configurationOptions"
+              :key="option.title"
+              class="px-5"
+            >
+              <v-col>
+                <v-btn
+                  rounded="xl"
+                  @click="openModal(option.component)"
+                >
+                  {{ option.title }}
+                </v-btn>
+              </v-col>
+            </v-row>
+        </v-card>
       </v-col>
 
       <v-col
         cols="auto"
-        class="report__container"
       >
-        <v-row
-          class="px-5"
+        <v-card
+          color="#18435A"
+          class="pa-5"
+          elevation="3"
+          height="500"
+          width="350"
         >
-          <v-col
-            cols="auto"
-          >
-            <h2>Relatórios</h2>
-          </v-col>
-        </v-row>
+          <v-row>
+            <v-col>
+              <h2
+                class="text-center"
+              >
+                Consultar
+              </h2>
+            </v-col>
+          </v-row>
 
-        <v-row
-          v-for="option in reportOptions"
-          :key="option.title"
-          class="px-5"
-        >
-          <v-col>
-            <v-btn
-              variant="outlined"
-              @click="handleReportOpenModalCall(option.title)"
-            >
-              {{ option.title }}
-            </v-btn>
-          </v-col>
-        </v-row>
+          <v-row
+            v-for="option in consultOptions"
+            :key="option.title"
+            class="px-5"
+          >
+            <v-col>
+              <v-btn
+                rounded="xl"
+                @click="openModal(option.component)"
+              >
+                {{ option.title }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
 
-  <CreatePerson
-    v-if="shouldOpenCreatePersonModal"
-    @closeModal="closeCreatePersonModal"
-  />
-
-  <CreateEvent
-    v-if="shouldOpenCreateEventModal"
-    @closeModal="closeCreateEventModal"
-  />
-
-  <CreateAward
-    v-if="shouldOpenCreateAwardModal"
-    @closeModal="closeCreateAwardModal"
-  />
-
-  <CreateMovie
-    v-if="shouldOpenCreateMovieModal"
-    @closeModal="closeCreateMovieModal"
-  />
-
-  <CreateEdition
-    v-if="shouldOpenCreateEditionModal"
-    @closeModal="closeCreateEditionModal"
-  />
-
-  <CreateMovieAward
-    v-if="shouldOpenCreateMovieAward"
-    @closeModal="closeCreateMovieAward"
-  />
-
-  <CreatePersonAward
-    v-if="shouldOpenCreatePersonAwardModal"
-    @closeModal="closeCreatePersonAwardModal"
-  />
-
-  <MostAwardedPerson
-    v-if="shouldOpenMostAwardedPersonModal"
-    @closeModal="closeMostAwardedPersonModal"
-  />
-
-  <MostAwardedMovie
-    v-if="shouldOpenMostAwardedMovieModal"
-    @closeModal="closeMostAwardedMovieModal"
-  />
-
-  <MostGrossingMovie
-    v-if="shouldOpenMostGrossingMovieModal"
-    @closeModal="closeMostGrossingMovieModal"
-  />
-
-  <BestActorAward
-    v-if="shouldOpenBestActorsAwardsModal"
-    @closeModal="closeBestActorsAwardsModal"
-  />
-
-  <Awards
-    v-if="shouldOpenAwardsModal"
-    @closeModal="closeAwardsModal"
+  <component
+    :is="currentModal"
+    v-if="currentModal"
+    @closeModal="closeModal"
   />
 </template>
 
@@ -136,7 +98,7 @@ import CreateEdition from '@/components/Modals/CreateEdition.vue'
 import CreateEvent from '@/components/Modals/CreateEvent.vue'
 import CreateMovie from '@/components/Modals/CreateMovie.vue'
 import CreateMovieAward from '@/components/Modals/CreateMovieAward.vue'
-import CreatePerson from '@/components/Modals/CreatePerson.vue'
+import CreateMedic from '@/components/Modals/CreateMedic.vue'
 import CreatePersonAward from '@/components/Modals/CreatePersonAward.vue'
 import MostAwardedMovie from '@/components/Modals/MostAwardedMovie.vue'
 import MostAwardedPerson from '@/components/Modals/MostAwardedPerson.vue'
@@ -152,7 +114,7 @@ export default {
     CreateEvent,
     CreateMovie,
     CreateMovieAward,
-    CreatePerson,
+    CreateMedic,
     CreatePersonAward,
     MostAwardedMovie,
     MostAwardedPerson,
@@ -160,143 +122,68 @@ export default {
 },
   data() {
     return {
-      shouldOpenCreateAwardModal: false,
-      shouldOpenCreateEditionModal: false,
-      shouldOpenCreateEventModal: false,
-      shouldOpenCreateMovieAward: false,
-      shouldOpenCreateMovieModal: false,
-      shouldOpenCreatePersonAwardModal: false,
-      shouldOpenCreatePersonModal: false,
-      shouldOpenMostAwardedMovieModal: false,
-      shouldOpenMostAwardedPersonModal: false,
-      shouldOpenMostGrossingMovieModal: false,
-      shouldOpenBestActorsAwardsModal: false,
-      shouldOpenAwardsModal: false,
+      currentModal: null,
       configurationOptions: [
-        { title: 'Inserir Nova Pessoa' },
-        { title: 'Inserir Novo Evento' },
-        { title: 'Inserir Nova Edição' },
-        { title: 'Inserir Novo Prêmio' },
-        { title: 'Inserir Novo Filme' },
-        { title: 'Inserir Premiação para Filme' },
-        { title: 'Inserir Premiação para Ator (Atriz)' },
+        {
+          title: 'Inserir Médico',
+          component: "CreateMedic",
+        },
+        {
+          title: 'Inserir Agenda',
+          component: "CreateSchedule",
+        },
+        {
+          title: 'Inserir Especialidade',
+          component: "CreateSpeciality",
+        },
+        {
+          title: 'Inserir Paciente',
+          component: "CreatePatient",
+        },
+        {
+          title: 'Inserir Consulta',
+          component: "CreateAppointment",
+        },
+        {
+          title: 'Inserir Doença',
+          component: "CreateDisease",
+        },
       ],
-      reportOptions: [
-        { title: 'As 10 Pessoas Mais Premiadas' },
-        { title: 'Os 10 Filmes Mais Premiados' },
-        { title: 'Os 10 Filmes com Maior Bilheteria' },
-        { title: 'Melhores Atores (Atrizes)' },
-        { title: 'Indicados a Prêmios' },
+      consultOptions: [
+        {
+          title: 'Médicos',
+          component: this.openMostAwardedPersonModal,
+        },
+        {
+          title: 'Agendas',
+          component: this.openMostAwardedMovieModal,
+        },
+        {
+          title: 'Especialidade',
+          component: this.openMostGrossingMovieModal,
+        },
+        {
+          title: 'Paciente',
+          component: this.openBestActorsAwardsModal,
+        },
+        {
+          title: 'Consulta',
+          component: this.openAwardsModal,
+        },
+        {
+          title: 'Consulta',
+          component: () => '',
+        },
       ]
     }
   },
   methods: {
-    handleConfigurationOpenModalCall(title) {
-      if (title === 'Inserir Nova Pessoa') this.openCreatePersonModal()
-
-      if (title === 'Inserir Novo Evento') this.openCreateEventModal()
-
-      if (title === 'Inserir Novo Prêmio') this.openCreateAwardModal()
-
-      if (title === 'Inserir Nova Edição') this.openCreateEditionModal()
-      
-      if (title === 'Inserir Novo Filme') this.openCreateMovieModal()
-
-      if (title === 'Inserir Premiação para Filme') this.openCreateMovieAward()
-
-      if (title === 'Inserir Premiação para Ator (Atriz)') this.openCreatePersonAward()
+    openModal(modalName) {
+      this.currentModal = modalName
     },
-    handleReportOpenModalCall(title) {
-      if (title === 'As 10 Pessoas Mais Premiadas') this.openMostAwardedPersonModal()
-
-      if (title === 'Os 10 Filmes Mais Premiados') this.openMostAwardedMovieModal()
-      
-      if (title === 'Os 10 Filmes com Maior Bilheteria') this.openMostGrossingMovieModal()
-
-      if (title === 'Melhores Atores (Atrizes)') this.openBestActorsAwardsModal()
-
-      if (title === 'Indicados a Prêmios') this.openAwardsModal()
-
-    },
-    openCreatePersonModal() {
-      this.shouldOpenCreatePersonModal = true
-    },
-    closeCreatePersonModal() {
-      this.shouldOpenCreatePersonModal = false
-    },
-    openCreateEventModal() {
-      this.shouldOpenCreateEventModal = true
-    },
-    closeCreateEventModal() {
-      this.shouldOpenCreateEventModal = false
-    },
-    openCreateAwardModal() {
-      this.shouldOpenCreateAwardModal = true 
-    },
-    closeCreateAwardModal() {
-      this.shouldOpenCreateAwardModal = false 
-    },
-    openCreateMovieModal() {
-      this.shouldOpenCreateMovieModal = true 
-    },
-    closeCreateMovieModal() {
-      this.shouldOpenCreateMovieModal = false 
-    },
-    openCreateEditionModal(){
-      this.shouldOpenCreateEditionModal = true
-    },
-    closeCreateEditionModal() {
-      this.shouldOpenCreateEditionModal = false
-    },
-    openCreateMovieAward() {
-      this.shouldOpenCreateMovieAward = true
-    },
-    closeCreateMovieAward() {
-      this.shouldOpenCreateMovieAward = false
-    },
-    openCreatePersonAward() {
-      this.shouldOpenCreatePersonAwardModal = true
-    },
-    closeCreatePersonAwardModal() {
-      this.shouldOpenCreatePersonAwardModal = false
-    },
-    openMostAwardedPersonModal() {
-      this.shouldOpenMostAwardedPersonModal = true
-    },
-    closeMostAwardedPersonModal() {
-      this.shouldOpenMostAwardedPersonModal = false
-    },
-    openMostAwardedMovieModal() {
-      this.shouldOpenMostAwardedMovieModal = true
-    },
-    closeMostAwardedMovieModal() {
-      this.shouldOpenMostAwardedMovieModal = false
-    },
-    openMostGrossingMovieModal() {
-      this.shouldOpenMostGrossingMovieModal = true
-    },
-    closeMostGrossingMovieModal() {
-      this.shouldOpenMostGrossingMovieModal = false
-    },
-    openBestActorsAwardsModal() {
-      this.shouldOpenBestActorsAwardsModal = true
-    },
-    closeBestActorsAwardsModal() {
-      this.shouldOpenBestActorsAwardsModal = false
-    },
-    openAwardsModal() {
-      this.shouldOpenAwardsModal = true
-    },
-    closeAwardsModal() {
-      this.shouldOpenAwardsModal = false
+    closeModal() {
+      this.currentModal = null
     },
   },
 }
 </script>
-
-<style>
-  .configuration__container, .report__container {
-    border: 1px solid;
-    border-radius: 1rem
-  };
-</style>

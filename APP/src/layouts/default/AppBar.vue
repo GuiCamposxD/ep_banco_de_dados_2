@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="background-color--dark-orange"
+    class="background-color--blue"
   >
     <v-row
       justify="center"

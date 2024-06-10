@@ -13,7 +13,7 @@
               cols="11"
             >
               <h2>
-              Cadastrar Pessoas
+              Cadastrar Médico
             </h2>
             </v-col>
 
@@ -37,80 +37,38 @@
           <v-row>
             <v-col>
               <v-text-field
-                v-model="artisticName"
-                label="Nome Artistico"
+                v-model="crm"
+                label="CRM"
                 :clearable="true"
               />
             </v-col>
 
             <v-col>
               <v-text-field
-                v-model="realName"
+                v-model="doctorName"
                 label="Nome"
                 :clearable="true"
               />
             </v-col>
-
-            <v-col>
-              <v-select
-                v-model="gender"
-                label="Sexo"
-                :items="['Masculino', 'Feminino', 'Outros']"
-              />
-            </v-col>
           </v-row>
 
           <v-row>
             <v-col>
               <v-text-field
-                v-model="birthYear"
-                label="Ano de Nascimento"
+                v-model="doctorPhone"
+                label="Telefone"
                 :clearable="true"
               />
             </v-col>
 
             <v-col>
               <v-text-field
-                v-model="site"
-                label="Site"
+                v-model="percentage"
+                label="Percentual"
                 :clearable="true"
               />
             </v-col>
 
-            <v-col>
-              <v-text-field
-                v-model="startYear"
-                label="Ano Inicio na Academia"
-                :clearable="true"
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="workYears"
-                label="Número Total de Anos Trabalhados"
-                :clearable="true"
-              />
-            </v-col>
-
-            <v-col>
-              <v-select
-                v-model="situation"
-                label="Situação"
-                :items="['Ativo', 'Inativo']"
-              />
-            </v-col>
-
-            <v-col>
-              <v-select
-                v-model="role"
-                label="Cargo"
-                :items="roles"
-                :multiple="true"
-              />
-            </v-col>
           </v-row>
 
           <v-row
@@ -121,7 +79,7 @@
             >
               <v-btn
                 variant="flat"
-                color="#FA7654"
+                color="red"
                 @click="closeModal"
               >
                 Cancelar
@@ -133,10 +91,10 @@
             >
               <v-btn
                 variant="flat"
-                color="#FAC95F"
+                color="#18435A"
                 @click="handleCreatePerson"
               >
-                Cadastrar Pessoa
+                Cadastrar Médico
               </v-btn>
             </v-col>
           </v-row>
@@ -152,7 +110,7 @@
       location="center"
     >
       <p>{{ snackBarMessage }}</p>
-  
+
       <template v-slot:actions>
         <v-btn
           color="pink"
@@ -171,24 +129,17 @@
 import axios from 'axios'
 
 export default {
-  name: 'CreatePerson',
+  name: 'CreateMedic',
   emits: [
     'closeModal',
   ],
   data() {
     return {
-      artisticName: '',
-      birthYear: '',
-      gender: null,
-      realName: '',
-      role: [],
-      roles: ['Diretor', 'Produtor', 'Roteirista', 'Ator'],
+      doctorName: '',
+      percentage: '',
+      doctorPhone: null,
+      crm: '',
       shouldShowSnackBar: false,
-      site: '',
-      situation: null,
-      snackBarMessage: '',
-      startYear: '',
-      workYears: '',
     }
   },
   methods: {
@@ -196,26 +147,21 @@ export default {
       this.$emit('closeModal')
     },
     async handleCreatePerson() {
-      const response = await axios.post('/pessoa', {
-        artisticName: this.artisticName,
-        birthYear: this.birthYear,
-        gender: this.gender,
-        realName: this.realName,
-        roles: this.role,
-        site: this.site,
-        situation: this.situation,
-        startYear: this.startYear,
-        workYears: this.workYears,
+      const response = await axios.post('/doctors', {
+        doctorName: this.doctorName,
+        percentage: this.percentage,
+        doctorPhone: this.doctorPhone,
+        crm: this.crm,
       })
 
       if (response.status === 200) {
-        this.snackBarMessage = 'Usuário cadastrado com sucesso'
+        this.snackBarMessage = 'Médico cadastrado com sucesso'
         this.shouldShowSnackBar = true
       }
 
       if (response.status === 500) {
         this.shouldShowSnackBar = true
-        this.snackBarMessage = 'Erro ao cadastrar usuário, verifique os campos!'
+        this.snackBarMessage = 'Erro ao cadastrar médico, verifique os campos!'
       }
     },
     closeSnackbar() {
