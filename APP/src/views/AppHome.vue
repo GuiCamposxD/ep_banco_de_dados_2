@@ -93,12 +93,12 @@
 <script>
 import Awards from '@/components/Modals/Awards.vue'
 import BestActorAward from '@/components/Modals/BestActorAwards.vue'
-import CreateAward from '@/components/Modals/CreateAward.vue'
+import CreateSchedule from '@/components/Modals/CreateSchedule.vue'
 import CreateEdition from '@/components/Modals/CreateEdition.vue'
 import CreateEvent from '@/components/Modals/CreateEvent.vue'
 import CreateMovie from '@/components/Modals/CreateMovie.vue'
 import CreateMovieAward from '@/components/Modals/CreateMovieAward.vue'
-import CreateMedic from '@/components/Modals/CreateMedic.vue'
+import CreateDoctor from '@/components/Modals/CreateDoctor.vue'
 import CreatePersonAward from '@/components/Modals/CreatePersonAward.vue'
 import MostAwardedMovie from '@/components/Modals/MostAwardedMovie.vue'
 import MostAwardedPerson from '@/components/Modals/MostAwardedPerson.vue'
@@ -109,12 +109,12 @@ export default {
   components: {
     Awards,
     BestActorAward,
-    CreateAward,
+    CreateSchedule,
     CreateEdition,
     CreateEvent,
     CreateMovie,
     CreateMovieAward,
-    CreateMedic,
+    CreateDoctor,
     CreatePersonAward,
     MostAwardedMovie,
     MostAwardedPerson,
@@ -126,7 +126,7 @@ export default {
       configurationOptions: [
         {
           title: 'Inserir Médico',
-          component: "CreateMedic",
+          component: "CreateDoctor",
         },
         {
           title: 'Inserir Agenda',
