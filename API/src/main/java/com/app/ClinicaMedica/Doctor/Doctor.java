@@ -21,7 +21,6 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ExistsTimePeriod
 public class Doctor {
     @Id
     private String crm;

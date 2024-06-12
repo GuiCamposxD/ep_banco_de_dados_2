@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistsTimePeriod {
-    String message() default "Time period already registered";
+    String message() default "Time period is between existent time period";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
