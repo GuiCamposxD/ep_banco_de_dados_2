@@ -152,34 +152,41 @@ export default {
 			snackBarMessage: '',
 			endHour: null,
       weekDays: [
-          'Segunda-Feira',
-          'Terça-Feira',
-          'Quarta-Feira',
-          'Quinta-feira',
-          'Sexta-Feira',
-          'Sábado',
-          'Domingo',
+        {
+          title: 'Segunda-Feira',
+          value: 'MONDAY',
+        },
+        {
+          title: 'Terça-Feira',
+          value: 'TUESDAY',
+        },
+        {
+          title: 'Quarta-Feira',
+          value: 'WEDNESDAY',
+        },
+        {
+          title: 'Quinta-feira',
+          value: 'THURSDAY',
+        },
+        {
+          title: 'Sexta-Feira',
+          value: 'FRIDAY',
+        },
+        {
+          title: 'Sábado',
+          value: 'SATURDAY',
+        },
+        {
+          title: 'Domingo',
+          value: 'SUNDAY',
+        },
       ],
-      weekDayDictionary: {
-        'Segunda-Feira': 'MONDAY',
-        'Terça-Feira': 'TUESDAY',
-        'Quarta-Feira': 'WEDNESDAY',
-        'Quinta-feira': 'THURSDAY',
-        'Sexta-Feira': 'FRIDAY',
-        'Sábado': 'SATURDAY',
-        'Domingo': 'SUNDAY',
-      }
     }
 	},
 	async mounted() {
 		const response = await axios.get('/doctors')
 		this.doctors = response.data
 	},
-  computed: {
-    handleWeekdays() {
-      return this.weekDayDictionary[this.weekDay]
-    }
-  },
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
@@ -194,7 +201,7 @@ export default {
 			try {
         await axios.post('/schedules', {
           crm: this.doctorCrm,
-          weekDay: this.handleWeekdays,
+          weekDay: this.weekDay,
           startHour: `${this.formatHour(this.startHour.hours)}:${this.formatHour(this.startHour.minutes)}:${this.formatHour(this.startHour.seconds)}`,
           endHour: `${this.formatHour(this.endHour.hours)}:${this.formatHour(this.endHour.minutes)}:${this.formatHour(this.endHour.seconds)}`,
         })

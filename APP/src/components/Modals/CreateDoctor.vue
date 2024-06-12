@@ -68,7 +68,19 @@
                 :clearable="true"
               />
             </v-col>
+          </v-row>
 
+          <v-row>
+            <v-col>
+              <v-autocomplete
+                v-model="idSpeciality"
+                label="Especialidade"
+                item-title="specialityName"
+                item-value="idSpeciality"
+                :clearable="true"
+                :items="specialities"
+              />
+            </v-col>
           </v-row>
 
           <v-row
@@ -92,7 +104,7 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreatePerson"
+                @click="handleCreateDoctor"
               >
                 Cadastrar Médico
               </v-btn>
@@ -139,27 +151,32 @@ export default {
       percentage: '',
       doctorPhone: null,
       crm: '',
+      idSpeciality: null,
+      specialities: [],
       shouldShowSnackBar: false,
     }
+  },
+  async mounted() {
+    const response = await axios.get('/specialities')
+    this.specialities = response.data
   },
   methods: {
     closeModal() {
       this.$emit('closeModal')
     },
-    async handleCreatePerson() {
-      const response = await axios.post('/doctors', {
-        doctorName: this.doctorName,
-        percentage: this.percentage,
-        doctorPhone: this.doctorPhone,
-        crm: this.crm,
-      })
+    async handleCreateDoctor() {
+      try {
+        await axios.post('/doctors', {
+          doctorName: this.doctorName,
+          percentage: this.percentage,
+          doctorPhone: this.doctorPhone,
+          crm: this.crm,
+          idSpeciality: this.idSpeciality
+        })
 
-      if (response.status === 200) {
         this.snackBarMessage = 'Médico cadastrado com sucesso'
         this.shouldShowSnackBar = true
-      }
-
-      if (response.status === 500) {
+      } catch (e) {
         this.shouldShowSnackBar = true
         this.snackBarMessage = 'Erro ao cadastrar médico, verifique os campos!'
       }

@@ -94,8 +94,8 @@
 import Awards from '@/components/Modals/Awards.vue'
 import BestActorAward from '@/components/Modals/BestActorAwards.vue'
 import CreateSchedule from '@/components/Modals/CreateSchedule.vue'
-import CreateEdition from '@/components/Modals/CreateEdition.vue'
-import CreateEvent from '@/components/Modals/CreateEvent.vue'
+import CreateSpeciality from '@/components/Modals/CreateSpeciality.vue'
+import CreatePatient from '@/components/Modals/CreatePatient.vue'
 import CreateMovie from '@/components/Modals/CreateMovie.vue'
 import CreateMovieAward from '@/components/Modals/CreateMovieAward.vue'
 import CreateDoctor from '@/components/Modals/CreateDoctor.vue'
@@ -110,8 +110,8 @@ export default {
     Awards,
     BestActorAward,
     CreateSchedule,
-    CreateEdition,
-    CreateEvent,
+    CreateSpeciality,
+    CreatePatient,
     CreateMovie,
     CreateMovieAward,
     CreateDoctor,

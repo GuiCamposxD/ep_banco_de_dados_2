@@ -2,7 +2,7 @@
 	<v-dialog
 		:model-value="true"
 		max-width="800"
-		persistent
+		:persistent="true"
 	>
 		<v-card>
 			<v-card-title>
@@ -12,7 +12,7 @@
 							cols="11"
 						>
 							<h2>
-							Cadastrar Evento
+							Cadastrar Especialidade
 						</h2>
 						</v-col>
 
@@ -36,7 +36,7 @@
 					<v-row>
 						<v-col>
 							<v-text-field
-								v-model="eventName"
+								v-model="specialityName"
 								label="Nome"
 								:clearable="true"
 							/>
@@ -44,27 +44,9 @@
 
 						<v-col>
 							<v-text-field
-								v-model="nationality"
-								label="Nacionalidade"
-								:clearable="true"
-							/>
-						</v-col>
-					</v-row>
-
-					<v-row>
-						<v-col>
-							<v-text-field
-								v-model="type"
-								label="Tipo"
-								:clearable="true"
-							/>
-						</v-col>
-
-						<v-col>
-							<v-text-field
-								v-model="startYear"
-								label="Ano Inicio do Evento"
-								:clearable="true"
+								v-model="specialityIndex"
+								label="Indíce"
+								return-object
 							/>
 						</v-col>
 					</v-row>
@@ -90,9 +72,9 @@
               <v-btn
                 variant="flat"
                 color="#FAC95F"
-                @click="handleCreateEvent"
+                @click="handleCreateEdition"
               >
-                Cadastrar Evento
+                Cadastrar Edição
               </v-btn>
             </v-col>
           </v-row>
@@ -108,7 +90,7 @@
 			location="center"
 		>
 			<p>{{ snackBarMessage }}</p>
-	
+
 			<template v-slot:actions>
 				<v-btn
 					color="pink"
@@ -127,46 +109,39 @@
 import axios from 'axios'
 
 export default {
-	name: 'CreateEvent',
+	name: 'CreateSpeciality',
 	emits: [
-    'closeModal',
-  ],
+		'closeModal',
+	],
 	data() {
 		return {
-			eventName: '',
-			type: '',
-			nationality: '',
-			startYear: '',
-			snackBarMessage: '',
-			shouldShowSnackBar: false,
+      specialityName: null,
+      specialityIndex: null,
+      shouldShowSnackBar: false,
+      snackBarMessage: null,
 		}
 	},
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
 		},
-		async handleCreateEvent() {
-			const response = await axios.post('/evento', {
-				eventName: this.eventName,
-				type: this.type,
-				nationality: this.nationality,
-				startYear: this.startYear,
-			})
+		async handleCreateEdition() {
+      try {
+        await axios.post('/specialities', {
+          specialityName: this.specialityName,
+          index: parseInt(this.specialityIndex),
+        })
 
-			if (response.status === 200) {
-				this.snackBarMessage = 'Evento cadastrado com sucesso'
-				this.shouldShowSnackBar = true
-			}
-
-			if (response.status === 500) {
-				this.snackBarMessage = 'Erro ao cadastrar usuário, verifique os campos!'
-				this.shouldShowSnackBar = true
-			}
+        this.snackBarMessage = 'Edição cadastrada com sucesso!!!'
+        this.shouldShowSnackBar = true
+      } catch (e) {
+        this.snackBarMessage = 'Erro ao cadsatrar Edição, verifique os campos'
+        this.shouldShowSnackBar = true
+      }
 		},
-		closeSnackbar() {
-			this.shouldShowSnackBar = false
-		},
+    closeSnackbar() {
+      this.shouldShowSnackBar = false
+    }
 	}
 }
 </script>
-]
