@@ -1,6 +1,7 @@
 package com.app.ClinicaMedica.Doctor;
 
 import com.app.ClinicaMedica.Appointment.Appointment;
+import com.app.ClinicaMedica.Constraints.ExistsTimePeriod;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpeciality;
 import com.app.ClinicaMedica.Schedule.Schedule;
 import com.fasterxml.jackson.annotation.JsonBackReference;
