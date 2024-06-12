@@ -4,7 +4,6 @@ import Enum.WeekDays;
 import com.app.ClinicaMedica.Constraints.IsTimeBetweenExistent;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Doctor.Doctor;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -39,6 +38,5 @@ public class Schedule {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crm", referencedColumnName = "crm", nullable = false)
-    @JsonBackReference
     private Doctor doctor;
 }

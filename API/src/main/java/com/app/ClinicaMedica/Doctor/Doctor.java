@@ -1,11 +1,12 @@
 package com.app.ClinicaMedica.Doctor;
 
 import com.app.ClinicaMedica.Appointment.Appointment;
-import com.app.ClinicaMedica.Constraints.ExistsTimePeriod;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpeciality;
 import com.app.ClinicaMedica.Schedule.Schedule;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -37,7 +38,6 @@ public class Doctor {
     private Float percentage;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
     private List<Schedule> schedules;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)

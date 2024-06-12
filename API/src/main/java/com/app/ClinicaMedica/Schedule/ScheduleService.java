@@ -32,7 +32,6 @@ public class ScheduleService {
         Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
 
         Schedule schedule = form.converter(doctor);
-        System.out.println(schedule);
         scheduleRepository.save(schedule);
         return new ScheduleDTO(schedule);
     }

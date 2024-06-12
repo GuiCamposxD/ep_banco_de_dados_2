@@ -4,6 +4,7 @@ import com.app.ClinicaMedica.Doctor.Doctor;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -15,6 +16,7 @@ public class DoctorUpdateDTO {
     private String doctorName;
 
     @NotEmpty(message = "Doctor phone is mandatory")
+    @Size(min = 8, max = 11)
     private String doctorPhone;
 
     @NotNull(message = "Percentage is mandatory")

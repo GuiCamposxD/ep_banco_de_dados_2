@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("exert-speciality")
+@RequestMapping(path = "exert-specialities")
 public class ExertSpecialityController {
     private final ExertSpecialityService exertSpecialityService;
 

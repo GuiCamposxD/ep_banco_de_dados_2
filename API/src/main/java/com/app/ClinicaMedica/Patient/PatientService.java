@@ -4,6 +4,7 @@ import Util.FetchEntity;
 import com.app.ClinicaMedica.Patient.DTO.PatientCreateDTO;
 import com.app.ClinicaMedica.Patient.DTO.PatientDTO;
 import com.app.ClinicaMedica.Patient.DTO.PatientUpdateDTO;
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class PatientService {
 
     @Transactional
     public PatientDTO addNewPatient(PatientCreateDTO form) {
+        if (patientRepository.existsByCpf(form.getCpf())) throw new EntityExistsException("This Patient already exists");
+
         Patient patient = form.converter();
 
         patientRepository.save(patient);
