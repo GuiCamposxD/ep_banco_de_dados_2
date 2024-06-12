@@ -2,9 +2,7 @@ package com.app.ClinicaMedica.Patient.DTO;
 
 import Enum.Gender;
 import com.app.ClinicaMedica.Patient.Patient;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

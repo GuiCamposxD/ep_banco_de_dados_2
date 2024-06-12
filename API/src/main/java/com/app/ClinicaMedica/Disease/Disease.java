@@ -15,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Disease {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "disease_sequence")
+    @SequenceGenerator(name = "disease_sequence", sequenceName = "dis_seq")
     private Long idDisease;
 
     @NotEmpty

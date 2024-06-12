@@ -17,7 +17,8 @@ import java.util.List;
 @StartHourBeforeEndHour
 public class Diagnostic {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "diagnostic_sequence")
+    @SequenceGenerator(name = "diagnostic_sequence", sequenceName = "dia_seq")
     private Long idDiagnostic;
 
     private String recommendedTreatment;

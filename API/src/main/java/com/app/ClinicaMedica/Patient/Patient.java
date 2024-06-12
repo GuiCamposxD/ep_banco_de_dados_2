@@ -16,7 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Patient {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "patient_sequence")
+    @SequenceGenerator(name = "patient_sequence", sequenceName = "pat_seq")
     private Long idPatient;
 
     @NotEmpty

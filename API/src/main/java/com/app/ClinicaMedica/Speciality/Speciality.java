@@ -19,7 +19,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Speciality {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "speciality_sequence")
+    @SequenceGenerator(name = "speciality_sequence", sequenceName = "spe_seq")
     private Long idSpeciality;
 
     @NotEmpty

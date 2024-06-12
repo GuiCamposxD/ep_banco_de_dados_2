@@ -23,7 +23,8 @@ import java.util.Set;
 @StartHourBeforeEndHour
 public class Appointment {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "appointment_sequence")
+    @SequenceGenerator(name = "appointment_sequence", sequenceName = "app_seq")
     private Long idAppointment;
 
     @ManyToOne(fetch = FetchType.LAZY)
