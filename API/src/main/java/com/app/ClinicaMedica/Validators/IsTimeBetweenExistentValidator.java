@@ -1,20 +1,18 @@
 package com.app.ClinicaMedica.Validators;
 
 
-import com.app.ClinicaMedica.Constraints.ExistsTimePeriod;
+import com.app.ClinicaMedica.Constraints.IsTimeBetweenExistent;
 import com.app.ClinicaMedica.Doctor.Doctor;
-import com.app.ClinicaMedica.Schedule.DTO.ScheduleDTO;
 import com.app.ClinicaMedica.Schedule.Schedule;
-import com.app.ClinicaMedica.Schedule.ScheduleService;
-import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
 
-public class ExistsTimePeriodValidator implements ConstraintValidator<ExistsTimePeriod, Schedule> {
+public class IsTimeBetweenExistentValidator implements ConstraintValidator<IsTimeBetweenExistent, Schedule> {
 
     @Override
-    public void initialize(ExistsTimePeriod constraintAnnotation){
+    public void initialize(IsTimeBetweenExistent constraintAnnotation){
     }
 
     @Override

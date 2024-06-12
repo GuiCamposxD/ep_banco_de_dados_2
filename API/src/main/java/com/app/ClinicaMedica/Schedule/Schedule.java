@@ -1,7 +1,7 @@
 package com.app.ClinicaMedica.Schedule;
 
 import Enum.WeekDays;
-import com.app.ClinicaMedica.Constraints.ExistsTimePeriod;
+import com.app.ClinicaMedica.Constraints.IsTimeBetweenExistent;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,7 +20,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @StartHourBeforeEndHour
-@ExistsTimePeriod
+@IsTimeBetweenExistent
 public class Schedule {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "schedule_sequence")
