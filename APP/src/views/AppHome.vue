@@ -96,10 +96,10 @@ import BestActorAward from '@/components/Modals/BestActorAwards.vue'
 import CreateSchedule from '@/components/Modals/CreateSchedule.vue'
 import CreateSpeciality from '@/components/Modals/CreateSpeciality.vue'
 import CreatePatient from '@/components/Modals/CreatePatient.vue'
-import CreateMovie from '@/components/Modals/CreateMovie.vue'
-import CreateMovieAward from '@/components/Modals/CreateMovieAward.vue'
+import CreateAppointment from '@/components/Modals/CreateAppointment.vue'
+import CreateDisease from '@/components/Modals/CreateDisease.vue'
 import CreateDoctor from '@/components/Modals/CreateDoctor.vue'
-import CreatePersonAward from '@/components/Modals/CreatePersonAward.vue'
+import CreateDiagnose from '@/components/Modals/CreateDiagnose.vue'
 import MostAwardedMovie from '@/components/Modals/MostAwardedMovie.vue'
 import MostAwardedPerson from '@/components/Modals/MostAwardedPerson.vue'
 import MostGrossingMovie from '@/components/Modals/MostGrossingMovie.vue'
@@ -112,10 +112,10 @@ export default {
     CreateSchedule,
     CreateSpeciality,
     CreatePatient,
-    CreateMovie,
-    CreateMovieAward,
+    CreateAppointment,
+    CreateDisease,
     CreateDoctor,
-    CreatePersonAward,
+    CreateDiagnose,
     MostAwardedMovie,
     MostAwardedPerson,
     MostGrossingMovie,
@@ -148,6 +148,10 @@ export default {
           title: 'Inserir Doença',
           component: "CreateDisease",
         },
+        {
+          title: 'Inserir Diagnostico',
+          component: "CreateDiagnose",
+        },
       ],
       consultOptions: [
         {
@@ -171,8 +175,12 @@ export default {
           component: this.openAwardsModal,
         },
         {
-          title: 'Consulta',
-          component: () => '',
+          title: 'Doença',
+          component: this.openDiseaseModal,
+        },
+        {
+          title: 'Diagnóstico',
+          component: this.openDiagnoseModal,
         },
       ]
     }

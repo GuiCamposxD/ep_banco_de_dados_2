@@ -59,7 +59,7 @@
             >
               <v-btn
                 variant="flat"
-                color="#FA7654"
+                color="red"
                 @click="closeModal"
               >
                 Cancelar
@@ -71,7 +71,7 @@
             >
               <v-btn
                 variant="flat"
-                color="#FAC95F"
+                color="#18435A"
                 @click="handleCreateEdition"
               >
                 Cadastrar Edição
@@ -132,10 +132,10 @@ export default {
           index: parseInt(this.specialityIndex),
         })
 
-        this.snackBarMessage = 'Edição cadastrada com sucesso!!!'
+        this.snackBarMessage = 'Edição cadastrada com sucesso'
         this.shouldShowSnackBar = true
       } catch (e) {
-        this.snackBarMessage = 'Erro ao cadsatrar Edição, verifique os campos'
+        this.snackBarMessage = 'Erro ao cadsatrar Edição, verifique os campos!'
         this.shouldShowSnackBar = true
       }
 		},

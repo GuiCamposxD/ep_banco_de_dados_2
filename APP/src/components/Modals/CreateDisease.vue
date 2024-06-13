@@ -12,11 +12,11 @@
 							cols="11"
 						>
 						<h2>
-							Cadastrar Premiação Filme
+							Cadastrar Doença
 						</h2>
-                        
+
 						</v-col>
-                        
+
 						<v-col
 							cols="1"
 							justify="end"
@@ -36,35 +36,9 @@
 				<v-container>
 					<v-row>
 						<v-col>
-							<v-autocomplete
-								v-model="selectedMovie"
-								label="Filme"
-								clearable
-								item-title="titulo_original"
-								item-value="titulo_original"
-								return-object
-								:items="movies"
-							/>
-						</v-col>
-
-						<v-col>
-							<v-autocomplete
-								v-model="selectedAward"
-								label="Premio"
-								clearable
-								item-title="nome"
-								item-value="nome"
-								return-object
-								:items="awards"
-							/>
-						</v-col>
-
-						<v-col>
-							<v-select
-								v-model="isAwarded"
-								label="É premiado"
-								clearable
-								:items="isAwardedOptions"
+							<v-text-field
+								v-model="diseaseName"
+								label="Nome da Doença"
 							/>
 						</v-col>
 					</v-row>
@@ -77,7 +51,7 @@
             >
               <v-btn
                 variant="flat"
-                color="#FA7654"
+                color="red"
                 @click="closeModal"
               >
                 Cancelar
@@ -89,10 +63,10 @@
             >
               <v-btn
                 variant="flat"
-                color="#FAC95F"
+                color="#18435A"
                 @click="handleCreateMovieAward"
               >
-                Cadastrar Premiação para Filme
+                Cadastrar Doença
               </v-btn>
             </v-col>
           </v-row>
@@ -126,47 +100,30 @@
 import axios from 'axios'
 
 export default {
-	name: 'CreateMovieAward',
+	name: 'CreateDisease',
 	data() {
 		return {
-			awards: [],
-			isAwarded: null,
-			isAwardedOptions: ['Sim', 'Não'],
-			movies: [],
-			selectedAward: [],
-			selectedMovie: null,
+			diseaseName: null,
 			shouldShowSnackBar: false,
 			snackBarMessage: '',
 		}
-	},
-	async mounted() {
-		const moviesReponse = await axios.get('/filme')
-		this.movies = moviesReponse.data
-
-		const awardsReponse = await axios.get('/premio')
-		this.awards = awardsReponse.data
 	},
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
 		},
 		async handleCreateMovieAward() {
-			const response = await axios.post('/filme_premiacao', {
-				movie: this.selectedMovie,
-				award: this.selectedAward,
-				isAwarded: this.isAwarded === 'Sim',
-			})
+      try {
+        await axios.post('/diseases', {
+          diseaseName: this.diseaseName
+        })
 
-			if (response.status === 200) {
-				this.snackBarMessage = 'Premiação para filme cadastrada com sucesso!!!'
-				this.shouldShowSnackBar = true
-				return
-			}
-
-			if (response.status === 500) {
-				this.snackBarMessage = 'Erro ao cadastrar premiação para filme, verifique os campos'
-				this.shouldShowSnackBar = true
-			}
+        this.snackBarMessage = 'Doença cadastrada com sucesso'
+        this.shouldShowSnackBar = true
+      } catch (e) {
+        this.snackBarMessage = 'Erro ao cadastrar doença, verifique os campos!'
+        this.shouldShowSnackBar = true
+      }
 		},
 	}
 }

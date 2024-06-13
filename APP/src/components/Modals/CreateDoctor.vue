@@ -13,7 +13,7 @@
               cols="11"
             >
               <h2>
-              Cadastrar Médico
+              Cadastrar Médico(a)
             </h2>
             </v-col>
 
@@ -77,6 +77,7 @@
                 label="Especialidade"
                 item-title="specialityName"
                 item-value="idSpeciality"
+                no-data-text="Nenhuma especialidade econtrada"
                 :clearable="true"
                 :items="specialities"
               />
@@ -106,7 +107,7 @@
                 color="#18435A"
                 @click="handleCreateDoctor"
               >
-                Cadastrar Médico
+                Cadastrar Médico(a)
               </v-btn>
             </v-col>
           </v-row>
@@ -174,11 +175,11 @@ export default {
           idSpeciality: this.idSpeciality
         })
 
-        this.snackBarMessage = 'Médico cadastrado com sucesso'
+        this.snackBarMessage = 'Médico(a) cadastrado com sucesso'
         this.shouldShowSnackBar = true
       } catch (e) {
         this.shouldShowSnackBar = true
-        this.snackBarMessage = 'Erro ao cadastrar médico, verifique os campos!'
+        this.snackBarMessage = 'Erro ao cadastrar médico(a), verifique os campos!'
       }
     },
     closeSnackbar() {

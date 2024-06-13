@@ -2,7 +2,7 @@
 	<v-dialog
 		max-width="1250"
 		:model-value="true"
-		persistent
+		:persistent="true"
 	>
 		<v-card>
 			<v-card-title>
@@ -12,11 +12,11 @@
 							cols="11"
 						>
 						<h2>
-							Cadastrar Premiação para Ator (Atriz)
+							Cadastrar Diagnóstico
 						</h2>
-                        
+
 						</v-col>
-                        
+
 						<v-col
 							cols="1"
 							justify="end"
@@ -36,26 +36,26 @@
 				<v-container>
 					<v-row>
             <v-col>
-							<v-autocomplete
-								v-model="selectedAward"
-								label="Premio"
-								clearable
-								item-title="nome"
-								item-value="nome"
-								return-object
-								:items="awards"
+							<v-text-field
+								v-model="diagnoseRecommendedTreatment"
+								label="Tratamento Recomendado"
+                :clearable="true"
 							/>
 						</v-col>
 
             <v-col>
-              <v-autocomplete
-                v-model="selectedPerson"
-								label="Ator (Atriz)"
-								clearable
-								item-title="nome_art"
-								item-value="nome_art"
-								return-object
-								:items="persons"
+              <v-text-field
+                v-model="diagnosePrescriptionMedicines"
+								label="Remédios Receitados"
+								:clearable="true"
+              />
+            </v-col>
+
+            <v-col>
+              <v-text-field
+                v-model="diagnoseObservations"
+                label="Observações"
+                :clearable="true"
               />
             </v-col>
 					</v-row>
@@ -63,24 +63,25 @@
           <v-row>
 						<v-col>
 							<v-autocomplete
-								v-model="selectedMovie"
-								label="Filme"
-								clearable
-								item-title="titulo_original"
-								item-value="titulo_original"
-								return-object
-								:items="movies"
+								v-model="diagnoseAppointment"
+								label="Consulta"
+                :item-title="getAppointmentItem"
+                item-value="idAppointment"
+								:clearable="true"
+								:items="appointments"
 							/>
 						</v-col>
 
-						<v-col>
-							<v-select
-								v-model="isAwarded"
-								label="Ganhou"
-								clearable
-								:items="isAwardedOptions"
-							/>
-						</v-col>
+            <v-col>
+              <v-autocomplete
+                v-model="diagnoseDisease"
+                label="Doença"
+                item-title="diseaseName"
+                item-value="idDisease"
+                :clearable="true"
+                :items="diseases"
+              />
+            </v-col>
           </v-row>
 
 					<v-row
@@ -140,41 +141,42 @@
 import axios from 'axios'
 
 export default {
-	name: 'CreateMovieAward',
+	name: 'CreateDiagnose',
 	data() {
 		return {
-			awards: [],
-			isAwarded: null,
-			isAwardedOptions: ['Sim', 'Não'],
-			movies: [],
-			selectedAward: [],
-			selectedMovie: null,
+      appointments: [],
+      diseases: [],
+      diagnoseDisease: null,
+      diagnoseAppointment: null,
+      diagnosePrescriptionMedicines: null,
+      diagnoseRecommendedTreatment: null,
+      diagnoseObservations: null,
 			shouldShowSnackBar: false,
 			snackBarMessage: '',
-      persons: [],
-      selectedPerson: null,
 		}
 	},
 	async mounted() {
-		const moviesReponse = await axios.get('/filme')
-		this.movies = moviesReponse.data
+		const [appointmentsResponse, diseaseResponse] = await Promise.all([
+      axios.get('/appointments'),
+      axios.get('/diseases'),
+    ])
 
-		const awardsReponse = await axios.get('/premio')
-		this.awards = awardsReponse.data
-
-    const personReponse = await axios.get('/pessoa')
-    this.persons = personReponse.data
+    this.appointments = appointmentsResponse.data
+    this.diseases = diseaseResponse.data
 	},
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
 		},
+    getAppointmentItem(item) {
+      return `${item.startHour} - ${item.endHour} - ${item.date} - ${item.doctor.doctorName}`
+    },
 		async handleCreatePersonAward() {
 			const response = await axios.post('/pessoa_premiacao', {
-				award: this.selectedAward,
-				isAwarded: this.isAwarded === 'Sim',
-				movie: this.selectedMovie,
-        person: this.selectedPerson,
+        recommendedTreatment: this.diagnoseAppointment,
+        prescriptionMedicines: this.diagnosePrescriptionMedicines,
+        observations: this.diagnoseObservations,
+
 			})
 
 			if (response.status === 200) {

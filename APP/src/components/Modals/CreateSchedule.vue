@@ -195,21 +195,21 @@ export default {
       this.shouldShowSnackBar = false
     },
     formatHour(hour) {
-      return String(hour).padStart(2, '0')
+      return `${String(hour.hours).padStart(2, '0')}:${String(hour.minutes).padStart(2, '0')}:${String(hour.seconds).padStart(2, '0')}`
     },
 		async handleCreateAward() {
 			try {
         await axios.post('/schedules', {
           crm: this.doctorCrm,
           weekDay: this.weekDay,
-          startHour: `${this.formatHour(this.startHour.hours)}:${this.formatHour(this.startHour.minutes)}:${this.formatHour(this.startHour.seconds)}`,
-          endHour: `${this.formatHour(this.endHour.hours)}:${this.formatHour(this.endHour.minutes)}:${this.formatHour(this.endHour.seconds)}`,
+          startHour: this.formatHour(this.startHour),
+          endHour: this.formatHour(this.endHour),
         })
 
-        this.snackBarMessage = 'Agenda cadastrada com sucesso!!!'
+        this.snackBarMessage = 'Agenda cadastrada com sucesso'
         this.shouldShowSnackBar = true
       } catch (e) {
-        this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos'
+        this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos!'
         this.shouldShowSnackBar = true
       }
 		},
