@@ -1,6 +1,6 @@
 package com.app.ClinicaMedica.Patient.DTO;
 
-import Enum.Gender;
+import Enum.Genders;
 import com.app.ClinicaMedica.Patient.Patient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -33,7 +33,7 @@ public class PatientDTO {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private final Gender gender;
+    private final Genders genders;
 
     public PatientDTO(Patient patient) {
         this.idPatient = patient.getIdPatient();
@@ -42,7 +42,7 @@ public class PatientDTO {
         this.patientPhone = patient.getPatientPhone();
         this.address = patient.getAddress();
         this.age = patient.getAge();
-        this.gender = patient.getGender();
+        this.genders = patient.getGender();
     }
 
     public static List<PatientDTO> converter(List<Patient> patients) {

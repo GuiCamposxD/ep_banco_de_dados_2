@@ -23,6 +23,8 @@ public class Diagnostic {
 
     private String recommendedTreatment;
 
+    private String prescriptionMedicines;
+
     private String observations;
 
     @ManyToOne(fetch = FetchType.LAZY)

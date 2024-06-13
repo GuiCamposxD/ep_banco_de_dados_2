@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 @Getter
 public class DiseaseDTO {
     @Id
-    private final Long idPatient;
+    private final Long idDisease;
 
     @NotEmpty(message = "Disease Name is mandatory")
-    private final String disease;
+    private final String diseaseName;
 
     public DiseaseDTO(Disease disease) {
-        this.idPatient = disease.getIdDisease();
-        this.disease = disease.getDiseaseName();
+        this.idDisease = disease.getIdDisease();
+        this.diseaseName = disease.getDiseaseName();
     }
 
     public static List<DiseaseDTO> converter(List<Disease> diseases) {

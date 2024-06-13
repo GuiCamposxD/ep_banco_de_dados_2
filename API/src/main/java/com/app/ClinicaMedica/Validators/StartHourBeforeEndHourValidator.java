@@ -5,17 +5,17 @@ import com.app.ClinicaMedica.Schedule.Schedule;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class StartHourBeforeEndHourValidator implements ConstraintValidator<StartHourBeforeEndHour, Schedule> {
+public class StartHourBeforeEndHourValidator implements ConstraintValidator<StartHourBeforeEndHour, TimeInterval> {
     @Override
     public void initialize(StartHourBeforeEndHour constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(Schedule schedule, ConstraintValidatorContext context) {
-        if (schedule.getStartHour() == null || schedule.getEndHour() == null) {
+    public boolean isValid(TimeInterval timeInterval, ConstraintValidatorContext context) {
+        if (timeInterval.getStartHour() == null || timeInterval.getEndHour() == null) {
             return true;
         }
 
-        return schedule.getStartHour().isBefore(schedule.getEndHour());
+        return timeInterval.getStartHour().isBefore(timeInterval.getEndHour());
     }
 }

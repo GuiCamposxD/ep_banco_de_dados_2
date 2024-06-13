@@ -1,6 +1,6 @@
 package com.app.ClinicaMedica.Patient.DTO;
 
-import Enum.Gender;
+import Enum.Genders;
 import com.app.ClinicaMedica.Patient.Patient;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +25,7 @@ public class PatientUpdateDTO {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Genders gender;
 
     public void update(Patient patient) {
         patient.setPatientName(this.getPatientName());

@@ -1,11 +1,12 @@
 package com.app.ClinicaMedica.Appointment;
 
-import Enum.PaymentMethod;
+import Enum.PaymentMethods;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Diagnostic.Diagnostic;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.app.ClinicaMedica.Patient.Patient;
 import com.app.ClinicaMedica.Speciality.Speciality;
+import com.app.ClinicaMedica.Validators.TimeInterval;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -17,11 +18,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @StartHourBeforeEndHour
-public class Appointment {
+public class Appointment implements TimeInterval {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "appointment_sequence")
     @SequenceGenerator(name = "appointment_sequence", sequenceName = "app_seq")
@@ -54,7 +54,7 @@ public class Appointment {
     private Float paidAmount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private PaymentMethods paymentMethod;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Diagnostic> diagnostics;

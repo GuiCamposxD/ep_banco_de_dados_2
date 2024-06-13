@@ -3,6 +3,8 @@ package com.app.ClinicaMedica.ExertSpeciality;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityUpdateDTO;
+import com.app.ClinicaMedica.Speciality.DTO.SpecialityDTO;
+import com.app.ClinicaMedica.Speciality.Speciality;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,16 @@ public class ExertSpecialityController {
         return ResponseEntity.ok(this.exertSpecialityService.getExertSpeciality());
     }
 
+    @GetMapping(path = "{crm}")
+    public ResponseEntity<List<SpecialityDTO>> getSpecialitiesByDoctorCrm(
+        @PathVariable String crm
+    ) {
+        return ResponseEntity.ok(this.exertSpecialityService.findSpecialitiesByDoctorCrm(crm));
+    }
+
     @PostMapping
     public ResponseEntity<ExertSpecialityDTO> registerExertSpeciality(
-            @Valid @RequestBody ExertSpecialityCreateDTO form
+        @Valid @RequestBody ExertSpecialityCreateDTO form
     ) {
         return ResponseEntity.ok(this.exertSpecialityService.addNewExertSpeciality(form));
     }

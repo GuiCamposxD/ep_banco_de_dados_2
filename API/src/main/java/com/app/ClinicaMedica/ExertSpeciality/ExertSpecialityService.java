@@ -6,6 +6,7 @@ import com.app.ClinicaMedica.Doctor.DoctorRepository;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityUpdateDTO;
+import com.app.ClinicaMedica.Speciality.DTO.SpecialityDTO;
 import com.app.ClinicaMedica.Speciality.Speciality;
 import com.app.ClinicaMedica.Speciality.SpecialityRepository;
 import jakarta.transaction.Transactional;
@@ -33,6 +34,10 @@ public class ExertSpecialityService {
 
     public List<ExertSpecialityDTO> getExertSpeciality() {
         return ExertSpecialityDTO.converter(this.exertSpecialityRepository.findAll());
+    }
+
+    public List<SpecialityDTO> findSpecialitiesByDoctorCrm(String crm) {
+        return SpecialityDTO.converter(this.exertSpecialityRepository.findSpecialitiesByDoctorCrm(crm));
     }
 
     @Transactional

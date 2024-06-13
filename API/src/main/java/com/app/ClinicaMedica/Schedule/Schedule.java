@@ -4,6 +4,7 @@ import Enum.WeekDays;
 import com.app.ClinicaMedica.Constraints.IsTimeBetweenExistent;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Doctor.Doctor;
+import com.app.ClinicaMedica.Validators.TimeInterval;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @StartHourBeforeEndHour
 @IsTimeBetweenExistent
-public class Schedule {
+public class Schedule implements TimeInterval {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "schedule_sequence")
     @SequenceGenerator(name = "schedule_sequence", sequenceName = "sch_seq")

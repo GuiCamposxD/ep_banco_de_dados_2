@@ -1,6 +1,6 @@
 package com.app.ClinicaMedica.Appointment.DTO;
 
-import Enum.PaymentMethod;
+import Enum.PaymentMethods;
 import com.app.ClinicaMedica.Appointment.Appointment;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
 import com.app.ClinicaMedica.Patient.DTO.PatientDTO;
@@ -43,7 +43,7 @@ public class AppointmentDTO {
     private final Float paidAmount;
 
     @Enumerated(EnumType.STRING)
-    private final PaymentMethod paymentMethod;
+    private final PaymentMethods paymentMethod;
 
     public AppointmentDTO(Appointment appointment) {
         this.idAppointment = appointment.getIdAppointment();

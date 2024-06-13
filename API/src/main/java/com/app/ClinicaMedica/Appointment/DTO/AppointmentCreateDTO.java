@@ -2,7 +2,7 @@ package com.app.ClinicaMedica.Appointment.DTO;
 
 import com.app.ClinicaMedica.Appointment.Appointment;
 import com.app.ClinicaMedica.Doctor.Doctor;
-import Enum.PaymentMethod;
+import Enum.PaymentMethods;
 import com.app.ClinicaMedica.Patient.Patient;
 import com.app.ClinicaMedica.Speciality.Speciality;
 import jakarta.persistence.*;
@@ -40,7 +40,7 @@ public class AppointmentCreateDTO {
     private Float paidAmount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private PaymentMethods paymentMethod;
 
     public Appointment converter(
         Doctor doctor,

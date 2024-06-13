@@ -1,7 +1,7 @@
 package com.app.ClinicaMedica.Patient;
 
 import com.app.ClinicaMedica.Appointment.Appointment;
-import Enum.Gender;
+import Enum.Genders;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -39,7 +39,7 @@ public class Patient {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Genders gender;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Appointment> appointments;
