@@ -105,7 +105,7 @@
               <v-btn
                 variant="flat"
                 color="#FAC95F"
-                @click="handleCreatePersonAward"
+                @click="handleCreateDiagnose"
               >
                 Cadastrar Premiação para Pessoa
               </v-btn>
@@ -171,24 +171,22 @@ export default {
     getAppointmentItem(item) {
       return `${item.startHour} - ${item.endHour} - ${item.date} - ${item.doctor.doctorName}`
     },
-		async handleCreatePersonAward() {
-			const response = await axios.post('/pessoa_premiacao', {
-        recommendedTreatment: this.diagnoseAppointment,
-        prescriptionMedicines: this.diagnosePrescriptionMedicines,
-        observations: this.diagnoseObservations,
+		async handleCreateDiagnose() {
+			try {
+        await axios.post('/diagnostics', {
+          recommendedTreatment: this.diagnoseRecommendedTreatment,
+          prescriptionMedicines: this.diagnosePrescriptionMedicines,
+          observations: this.diagnoseObservations,
+          idAppointment: this.diagnoseAppointment.idAppointment,
+          idDisease: this.diagnoseDisease,
+        })
 
-			})
-
-			if (response.status === 200) {
-				this.snackBarMessage = 'Premiação para pessoa cadastrada com sucesso!!!'
-				this.shouldShowSnackBar = true
-				return
-			}
-
-			if (response.status === 500) {
-				this.snackBarMessage = 'Erro ao cadastrar premiação para pessoa, verifique os campos'
-				this.shouldShowSnackBar = true
-			}
+        this.snackBarMessage = 'Diagnóstico cadastrado com sucesso'
+        this.shouldShowSnackBar = true
+      } catch (e) {
+        this.snackBarMessage = 'Erro ao cadastrar diagnóstico, verifique os campos'
+        this.shouldShowSnackBar = true
+      }
 		},
 	}
 }

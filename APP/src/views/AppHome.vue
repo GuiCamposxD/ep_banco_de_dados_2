@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import Awards from '@/components/Modals/Awards.vue'
+import SearchDoctor from '@/components/Modals/SearchDoctor.vue'
 import BestActorAward from '@/components/Modals/BestActorAwards.vue'
 import CreateSchedule from '@/components/Modals/CreateSchedule.vue'
 import CreateSpeciality from '@/components/Modals/CreateSpeciality.vue'
@@ -107,7 +107,7 @@ import MostGrossingMovie from '@/components/Modals/MostGrossingMovie.vue'
 export default {
   name: 'AppHome',
   components: {
-    Awards,
+    SearchDoctor,
     BestActorAward,
     CreateSchedule,
     CreateSpeciality,
@@ -126,37 +126,37 @@ export default {
       configurationOptions: [
         {
           title: 'Inserir Médico',
-          component: "CreateDoctor",
+          component: 'CreateDoctor',
         },
         {
           title: 'Inserir Agenda',
-          component: "CreateSchedule",
+          component: 'CreateSchedule',
         },
         {
           title: 'Inserir Especialidade',
-          component: "CreateSpeciality",
+          component: 'CreateSpeciality',
         },
         {
           title: 'Inserir Paciente',
-          component: "CreatePatient",
+          component: 'CreatePatient',
         },
         {
           title: 'Inserir Consulta',
-          component: "CreateAppointment",
+          component: 'CreateAppointment',
         },
         {
           title: 'Inserir Doença',
-          component: "CreateDisease",
+          component: 'CreateDisease',
         },
         {
           title: 'Inserir Diagnostico',
-          component: "CreateDiagnose",
+          component: 'CreateDiagnose',
         },
       ],
       consultOptions: [
         {
           title: 'Médicos',
-          component: this.openMostAwardedPersonModal,
+          component: 'SearchDoctor',
         },
         {
           title: 'Agendas',
