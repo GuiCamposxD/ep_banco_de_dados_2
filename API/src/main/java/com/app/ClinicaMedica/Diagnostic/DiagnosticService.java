@@ -3,6 +3,8 @@ package com.app.ClinicaMedica.Diagnostic;
 import Util.FetchEntity;
 import com.app.ClinicaMedica.Appointment.Appointment;
 import com.app.ClinicaMedica.Appointment.AppointmentRepository;
+import com.app.ClinicaMedica.Diagnose.DTO.DiagnoseCreateDTO;
+import com.app.ClinicaMedica.Diagnose.DiagnoseService;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticCreateDTO;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticDTO;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticUpdateDTO;
@@ -16,14 +18,17 @@ import java.util.List;
 public class DiagnosticService {
     private final DiagnosticRepository diagnosticRepository;
     private final AppointmentRepository appointmentRepository;
+    private final DiagnoseService diagnoseService;
 
     @Autowired
     public DiagnosticService(
             DiagnosticRepository diagnosticRepository,
-            AppointmentRepository appointmentRepository
+            AppointmentRepository appointmentRepository,
+            DiagnoseService diagnoseService
     ) {
         this.diagnosticRepository = diagnosticRepository;
         this.appointmentRepository = appointmentRepository;
+        this.diagnoseService = diagnoseService;
     }
 
     public List<DiagnosticDTO> getDiagnostics() {
@@ -36,6 +41,8 @@ public class DiagnosticService {
 
         Diagnostic diagnostic = form.converter(appointment);
         this.diagnosticRepository.save(diagnostic);
+
+        this.diagnoseService.addNewDiagnose(new DiagnoseCreateDTO(diagnostic.getIdDiagnostic(), form.getIdDisease()));
 
         return new DiagnosticDTO(diagnostic);
     }

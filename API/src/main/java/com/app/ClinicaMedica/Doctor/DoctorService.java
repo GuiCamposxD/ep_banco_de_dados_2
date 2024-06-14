@@ -7,6 +7,7 @@ import com.app.ClinicaMedica.Doctor.DTO.DoctorUpdateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpecialityService;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,16 +36,18 @@ public class DoctorService {
     public DoctorDTO addNewDoctor(DoctorCreateDTO form) {
         if(doctorRepository.existsById(form.getCrm())) throw new EntityExistsException("This Doctor already exists");
 
-        Doctor doctor = form.converter();
-        doctorRepository.save(doctor);
-
         if(form.getIdSpeciality() != null) {
+            Doctor doctor = form.converter();
+            doctorRepository.save(doctor);
+
             exertSpecialityService.addNewExertSpeciality(
-                    new ExertSpecialityCreateDTO(form.getCrm(), form.getIdSpeciality())
+                new ExertSpecialityCreateDTO(form.getCrm(), form.getIdSpeciality())
             );
+
+            return new DoctorDTO(doctor);
         }
 
-        return new DoctorDTO(doctor);
+        throw new EntityNotFoundException("This Doctor doesn't have speciality");
     }
 
     @Transactional

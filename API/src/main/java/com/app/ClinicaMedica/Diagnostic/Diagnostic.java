@@ -14,7 +14,6 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@StartHourBeforeEndHour
 public class Diagnostic {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "diagnostic_sequence")

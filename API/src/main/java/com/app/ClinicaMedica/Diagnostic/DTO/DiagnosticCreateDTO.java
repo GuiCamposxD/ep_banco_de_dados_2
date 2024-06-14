@@ -19,6 +19,9 @@ public class DiagnosticCreateDTO {
     @NotNull(message = "Id Appointment is mandatory")
     private Long idAppointment;
 
+    @NotNull(message = "Id Disease is mandatory")
+    private Long idDisease;
+
     public Diagnostic converter(
         Appointment appointment
     ) {
