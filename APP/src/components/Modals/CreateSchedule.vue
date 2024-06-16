@@ -14,8 +14,8 @@
 							cols="11"
 						>
 							<h2>
-							Cadastrar Agenda
-						</h2>
+                {{isEdit ? 'Editar Agenda' : 'Cadastrar Agenda'}}
+              </h2>
 						</v-col>
 
 						<v-col
@@ -102,9 +102,9 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreateAward"
+                @click="handleCreateOrEditSchedule"
               >
-                Cadastrar Agenda
+                {{isEdit ? 'Editar Agenda' : 'Cadastrar Agenda'}}
               </v-btn>
             </v-col>
           </v-row>
@@ -136,9 +136,14 @@
 
 <script>
 import axios from 'axios'
+import weekDays from "@/enums/weekDays"
 
 export default {
 	name: 'CreateSchedule',
+  props: {
+    schedule: Object,
+    isEdit: Boolean,
+  },
 	emits: [
     'closeModal',
   ],
@@ -151,39 +156,13 @@ export default {
 			shouldShowSnackBar: false,
 			snackBarMessage: '',
 			endHour: null,
-      weekDays: [
-        {
-          title: 'Segunda-Feira',
-          value: 'MONDAY',
-        },
-        {
-          title: 'Terça-Feira',
-          value: 'TUESDAY',
-        },
-        {
-          title: 'Quarta-Feira',
-          value: 'WEDNESDAY',
-        },
-        {
-          title: 'Quinta-feira',
-          value: 'THURSDAY',
-        },
-        {
-          title: 'Sexta-Feira',
-          value: 'FRIDAY',
-        },
-        {
-          title: 'Sábado',
-          value: 'SATURDAY',
-        },
-        {
-          title: 'Domingo',
-          value: 'SUNDAY',
-        },
-      ],
+      weekDays,
+      idSchedule: null,
     }
 	},
 	async mounted() {
+    if(this.isEdit) this.loadSchedule()
+
 		const response = await axios.get('/doctors')
 		this.doctors = response.data
 	},
@@ -197,20 +176,52 @@ export default {
     formatHour(hour) {
       return `${String(hour.hours).padStart(2, '0')}:${String(hour.minutes).padStart(2, '0')}:${String(hour.seconds).padStart(2, '0')}`
     },
-		async handleCreateAward() {
-			try {
-        await axios.post('/schedules', {
-          crm: this.doctorCrm,
-          weekDay: this.weekDay,
-          startHour: this.formatHour(this.startHour),
-          endHour: this.formatHour(this.endHour),
-        })
+    convertHourToObject(hour) {
+      const timeParts = hour.split(':');
 
-        this.snackBarMessage = 'Agenda cadastrada com sucesso'
-        this.shouldShowSnackBar = true
-      } catch (e) {
-        this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos!'
-        this.shouldShowSnackBar = true
+      return {
+        hours: parseInt(timeParts[0], 10),
+        minutes: parseInt(timeParts[1], 10),
+        seconds: parseInt(timeParts[2], 10)
+      };
+    },
+    loadSchedule() {
+      if(this.schedule) {
+        console.log(this.schedule)
+        this.idSchedule = this.schedule.idSchedule
+        this.doctorCrm = this.schedule.doctor.crm
+        this.startHour = this.convertHourToObject(this.schedule.startHour)
+        this.endHour = this.convertHourToObject(this.schedule.endHour)
+        this.weekDay = this.schedule.weekDay
+      }
+    },
+		async handleCreateOrEditSchedule() {
+			try {
+        if(this.isEdit) {
+          await axios.patch(`/schedules/${this.idSchedule}`, {
+            crm: this.doctorCrm,
+            weekDay: this.weekDay,
+            startHour: this.formatHour(this.startHour),
+            endHour: this.formatHour(this.endHour),
+          })
+
+          this.snackBarMessage = 'Agenda editada com sucesso'
+          this.shouldShowSnackBar = true
+        } else {
+          await axios.post('/schedules', {
+            crm: this.doctorCrm,
+            weekDay: this.weekDay,
+            startHour: this.formatHour(this.startHour),
+            endHour: this.formatHour(this.endHour),
+          })
+
+          this.snackBarMessage = 'Agenda cadastrada com sucesso'
+          this.shouldShowSnackBar = true
+        }
+      }catch (e) {
+          if(this.isEdit) this.snackBarMessage = 'Erro ao editar Agenda, verifique os campos!'
+          this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos!'
+          this.shouldShowSnackBar = true
       }
 		},
 	}

@@ -5,6 +5,7 @@ import com.app.ClinicaMedica.Doctor.DTO.DoctorCreateDTO;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorDTO;
 import com.app.ClinicaMedica.Doctor.DTO.DoctorUpdateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
+import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityUpdateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.ExertSpecialityService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -29,20 +31,30 @@ public class DoctorService {
     }
 
     public List<DoctorDTO> getDoctors() {
-        return DoctorDTO.converter(doctorRepository.findAll());
+        return DoctorDTO.converter(doctorRepository.findAllByOrderByCrmAsc());
+    }
+
+    public DoctorDTO getDoctorByCrm(String crm) {
+        Optional<Doctor> doctor = this.doctorRepository.findByCrm(crm);
+
+        if(doctor.isPresent()) return new DoctorDTO(doctor.get());
+
+        throw new EntityNotFoundException("This Doctor doesn't exists");
     }
 
     @Transactional
     public DoctorDTO addNewDoctor(DoctorCreateDTO form) {
         if(doctorRepository.existsById(form.getCrm())) throw new EntityExistsException("This Doctor already exists");
 
-        if(form.getIdSpeciality() != null) {
+        if(!form.getIdSpecialities().isEmpty()) {
             Doctor doctor = form.converter();
             doctorRepository.save(doctor);
 
-            exertSpecialityService.addNewExertSpeciality(
-                new ExertSpecialityCreateDTO(form.getCrm(), form.getIdSpeciality())
-            );
+            for(Long idSpeciality : form.getIdSpecialities()) {
+                exertSpecialityService.addNewExertSpeciality(
+                    new ExertSpecialityCreateDTO(form.getCrm(), idSpeciality)
+                );
+            }
 
             return new DoctorDTO(doctor);
         }
@@ -54,10 +66,22 @@ public class DoctorService {
     public DoctorDTO updateDoctor(String crm, DoctorUpdateDTO form) {
         Doctor doctor = FetchEntity.fetchEntity(crm, this.doctorRepository);
 
-        form.update(doctor);
-        doctorRepository.save(doctor);
+        if(!form.getIdSpecialities().isEmpty()) {
+            form.update(doctor);
+            doctorRepository.save(doctor);
 
-        return new DoctorDTO(doctor);
+            for(Long idSpeciality : form.getIdSpecialities()) {
+                exertSpecialityService.updateExertSpeciality(
+                    crm,
+                    idSpeciality,
+                    new ExertSpecialityUpdateDTO(crm, idSpeciality)
+                );
+            }
+
+            return new DoctorDTO(doctor);
+        }
+
+        throw new EntityNotFoundException("This Doctor doesn't have speciality");
     }
 
     @Transactional

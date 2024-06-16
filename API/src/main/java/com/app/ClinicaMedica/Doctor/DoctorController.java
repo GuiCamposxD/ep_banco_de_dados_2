@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/doctors")
 public class DoctorController {
     private final DoctorService doctorService;
@@ -26,6 +25,13 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.getDoctors());
     }
 
+    @GetMapping("{crm}")
+    public ResponseEntity<DoctorDTO> getDoctorByCrm(
+        @PathVariable String crm
+    ) {
+        return ResponseEntity.ok(doctorService.getDoctorByCrm(crm));
+    }
+
     @PostMapping
     public ResponseEntity<DoctorDTO> registerDoctor(@Valid @RequestBody DoctorCreateDTO form) {
         return ResponseEntity.ok(doctorService.addNewDoctor(form));
@@ -33,8 +39,8 @@ public class DoctorController {
 
     @PatchMapping(path = "{crm}")
     public ResponseEntity<?> updateDoctor(
-            @PathVariable("crm") String crm,
-            @Valid @RequestBody DoctorUpdateDTO updateForm
+        @PathVariable("crm") String crm,
+        @Valid @RequestBody DoctorUpdateDTO updateForm
     ) {
         try {
             return ResponseEntity.ok(doctorService.updateDoctor(crm, updateForm));
@@ -45,7 +51,7 @@ public class DoctorController {
 
     @DeleteMapping(path = "{crm}")
     public ResponseEntity<?> deleteDoctor(
-            @PathVariable("crm") String crm
+        @PathVariable("crm") String crm
     ) {
         try {
             return ResponseEntity.ok(doctorService.deleteDoctor(crm));

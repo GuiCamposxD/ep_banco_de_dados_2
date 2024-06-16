@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Schedule;
 
+import Enum.WeekDays;
 import com.app.ClinicaMedica.Schedule.DTO.ScheduleCreateDTO;
 import com.app.ClinicaMedica.Schedule.DTO.ScheduleDTO;
 import com.app.ClinicaMedica.Schedule.DTO.ScheduleUpdateDTO;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/schedules")
 public class ScheduleController {
     private final ScheduleService scheduleService;
@@ -25,14 +25,22 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.getSchedulesByCrm(crm));
     }
 
+    @GetMapping(path = "{crm}/{weekDay}")
+    public ResponseEntity<List<ScheduleDTO>> getSchedulesByCrmAndWeekDay(
+        @PathVariable("crm") String crm,
+        @PathVariable("weekDay") WeekDays weekDay
+    ) {
+        return ResponseEntity.ok(scheduleService.getSchedulesByCrmAndWeekDay(crm, weekDay));
+    }
+
     @PostMapping
     public ResponseEntity<ScheduleDTO> addNewSchedule(@RequestBody ScheduleCreateDTO form) {
         return ResponseEntity.ok(scheduleService.addNewSchedule(form));
     }
 
-    @PatchMapping(path = "{scheduleId}")
+    @PatchMapping(path = "{idSchedule}")
     public ResponseEntity<?> updateSchedule(
-            @PathVariable("scheduleId") Long scheduleId,
+            @PathVariable("idSchedule") Long scheduleId,
             @RequestBody ScheduleUpdateDTO updateForm
     ) {
         try {
@@ -42,9 +50,9 @@ public class ScheduleController {
         }
     }
 
-    @DeleteMapping(path = "{scheduleId}")
+    @DeleteMapping(path = "{idSchedule}")
     public ResponseEntity<?> deleteSchedule(
-            @PathVariable("scheduleId") Long scheduleId
+            @PathVariable("idSchedule") Long scheduleId
     ) {
         try {
             return ResponseEntity.ok(scheduleService.deleteSchedule(scheduleId));

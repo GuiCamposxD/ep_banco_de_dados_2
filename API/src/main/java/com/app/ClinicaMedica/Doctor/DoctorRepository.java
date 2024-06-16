@@ -5,11 +5,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     Optional<Doctor> findByCrm(String crm);
+
+    List<Doctor> findAllByOrderByCrmAsc();
+
     @Modifying
     void deleteByCrm(String crm);
 }

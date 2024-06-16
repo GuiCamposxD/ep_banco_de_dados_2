@@ -1,6 +1,5 @@
 package com.app.ClinicaMedica.Validators;
 
-
 import com.app.ClinicaMedica.Constraints.IsTimeBetweenExistent;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.app.ClinicaMedica.Schedule.Schedule;
@@ -16,11 +15,13 @@ public class IsTimeBetweenExistentValidator implements ConstraintValidator<IsTim
 
     @Override
     public boolean isValid(Schedule schedule, ConstraintValidatorContext context) {
-
         Doctor doctor = schedule.getDoctor();
         List<Schedule> schedules = doctor.getSchedules();
+        Long currentScheduleId = schedule.getIdSchedule();
 
         for (Schedule s:schedules) {
+            if (currentScheduleId != null && currentScheduleId.equals(s.getIdSchedule())) continue;
+
             if (
                 schedule.getStartHour().isBefore(s.getEndHour())
                 && schedule.getEndHour().isAfter(s.getStartHour())

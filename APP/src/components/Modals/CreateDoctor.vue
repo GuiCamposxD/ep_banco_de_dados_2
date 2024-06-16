@@ -3,7 +3,6 @@
     max-width="800"
     :model-value="true"
     :persistent="true"
-    @click:outside="closeModal"
   >
     <v-card>
       <v-card-title>
@@ -13,8 +12,8 @@
               cols="11"
             >
               <h2>
-              Cadastrar Médico(a)
-            </h2>
+                {{ isEdit ? 'Editar Doutor(a)' : 'Cadastrar Doutor(a)' }}
+              </h2>
             </v-col>
 
             <v-col
@@ -73,11 +72,12 @@
           <v-row>
             <v-col>
               <v-autocomplete
-                v-model="idSpeciality"
+                v-model="idSpecialities"
                 label="Especialidade"
                 item-title="specialityName"
                 item-value="idSpeciality"
                 no-data-text="Nenhuma especialidade econtrada"
+                :multiple="true"
                 :clearable="true"
                 :items="specialities"
               />
@@ -105,9 +105,9 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreateDoctor"
+                @click="handleCreateOrEditDoctor"
               >
-                Cadastrar Médico(a)
+                {{ isEdit ? 'Editar Doutor(a)' : 'Cadastrar Doutor(a)' }}
               </v-btn>
             </v-col>
           </v-row>
@@ -142,7 +142,11 @@
 import axios from 'axios'
 
 export default {
-  name: 'CreateMedic',
+  name: 'CreateDoctor',
+  props: {
+    doctor: Object,
+    isEdit: Boolean,
+  },
   emits: [
     'closeModal',
   ],
@@ -152,34 +156,62 @@ export default {
       percentage: '',
       doctorPhone: null,
       crm: '',
-      idSpeciality: null,
+      idSpecialities: null,
       specialities: [],
       shouldShowSnackBar: false,
+      snackBarMessage: ''
     }
   },
   async mounted() {
-    const response = await axios.get('/specialities')
-    this.specialities = response.data
+    if(this.isEdit) await this.loadDoctor()
+
+    const specialitiesResponse = await axios.get('/specialities')
+    this.specialities = specialitiesResponse.data
   },
   methods: {
+    async loadDoctor() {
+      if(this.doctor) {
+        this.doctorName = this.doctor.doctorName
+        this.percentage = this.doctor.percentage
+        this.doctorPhone = this.doctor.doctorPhone
+        this.crm = this.doctor.crm
+
+        const exertSpecialitiesResponse = await axios.get(`/exert-specialities/${this.doctor.crm}`)
+        this.idSpecialities = exertSpecialitiesResponse.data.map((speciality) => speciality.idSpeciality)
+      }
+    },
     closeModal() {
       this.$emit('closeModal')
     },
-    async handleCreateDoctor() {
+    async handleCreateOrEditDoctor() {
       try {
-        await axios.post('/doctors', {
-          doctorName: this.doctorName,
-          percentage: this.percentage,
-          doctorPhone: this.doctorPhone,
-          crm: this.crm,
-          idSpeciality: this.idSpeciality
-        })
+        if(this.isEdit) {
+          await axios.patch(`/doctors/${this.crm}`, {
+            doctorName: this.doctorName,
+            percentage: this.percentage,
+            doctorPhone: this.doctorPhone,
+            idSpecialities: this.idSpecialities
+          })
 
-        this.snackBarMessage = 'Médico(a) cadastrado com sucesso'
-        this.shouldShowSnackBar = true
+          this.snackBarMessage = 'Doutor(a) editado com sucesso'
+          this.shouldShowSnackBar = true
+        } else {
+          await axios.post('/doctors', {
+            doctorName: this.doctorName,
+            percentage: this.percentage,
+            doctorPhone: this.doctorPhone,
+            crm: this.crm,
+            idSpecialities: this.idSpecialities
+          })
+
+          this.snackBarMessage = 'Doutor(a) cadastrado com sucesso'
+          this.shouldShowSnackBar = true
+        }
       } catch (e) {
+        if(this.isEdit) this.snackBarMessage = 'Erro ao editar doutor(a), verifique os campos!'
+
+        this.snackBarMessage = 'Erro ao cadastrar doutor(a), verifique os campos!'
         this.shouldShowSnackBar = true
-        this.snackBarMessage = 'Erro ao cadastrar médico(a), verifique os campos!'
       }
     },
     closeSnackbar() {

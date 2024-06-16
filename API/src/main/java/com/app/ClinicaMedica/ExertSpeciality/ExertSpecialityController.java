@@ -4,7 +4,6 @@ import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityCreateDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityDTO;
 import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityUpdateDTO;
 import com.app.ClinicaMedica.Speciality.DTO.SpecialityDTO;
-import com.app.ClinicaMedica.Speciality.Speciality;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "exert-specialities")
 public class ExertSpecialityController {
     private final ExertSpecialityService exertSpecialityService;

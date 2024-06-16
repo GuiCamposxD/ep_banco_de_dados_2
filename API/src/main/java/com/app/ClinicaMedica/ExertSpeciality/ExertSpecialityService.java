@@ -9,6 +9,7 @@ import com.app.ClinicaMedica.ExertSpeciality.DTO.ExertSpecialityUpdateDTO;
 import com.app.ClinicaMedica.Speciality.DTO.SpecialityDTO;
 import com.app.ClinicaMedica.Speciality.Speciality;
 import com.app.ClinicaMedica.Speciality.SpecialityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,14 +56,18 @@ public class ExertSpecialityService {
 
     @Transactional
     public ExertSpecialityDTO updateExertSpeciality(String crm, Long idSpeciality, ExertSpecialityUpdateDTO form) {
-        ExertSpeciality exertSpeciality = FetchEntity.fetchEntity(crm, idSpeciality, this.exertSpecialityRepository);
-        Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
-        Speciality speciality = FetchEntity.fetchEntity(form.getIdSpeciality(), this.specialityRepository, "Speciality");
+        try {
+            ExertSpeciality exertSpeciality = FetchEntity.fetchEntity(crm, idSpeciality, this.exertSpecialityRepository);
+            Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);
+            Speciality speciality = FetchEntity.fetchEntity(form.getIdSpeciality(), this.specialityRepository, "Speciality");
 
-        form.update(exertSpeciality, doctor, speciality);
-        this.exertSpecialityRepository.save(exertSpeciality);
+            form.update(exertSpeciality, doctor, speciality);
+            this.exertSpecialityRepository.save(exertSpeciality);
 
-        return new ExertSpecialityDTO(exertSpeciality);
+            return new ExertSpecialityDTO(exertSpeciality);
+        } catch (EntityNotFoundException e) {
+            return this.addNewExertSpeciality(new ExertSpecialityCreateDTO(crm, idSpeciality));
+        }
     }
 
     @Transactional

@@ -100,7 +100,7 @@ import CreateAppointment from '@/components/Modals/CreateAppointment.vue'
 import CreateDisease from '@/components/Modals/CreateDisease.vue'
 import CreateDoctor from '@/components/Modals/CreateDoctor.vue'
 import CreateDiagnose from '@/components/Modals/CreateDiagnose.vue'
-import MostAwardedMovie from '@/components/Modals/MostAwardedMovie.vue'
+import SearchSchedule from '@/components/Modals/SearchSchedule.vue'
 import MostAwardedPerson from '@/components/Modals/MostAwardedPerson.vue'
 import MostGrossingMovie from '@/components/Modals/MostGrossingMovie.vue'
 
@@ -116,7 +116,7 @@ export default {
     CreateDisease,
     CreateDoctor,
     CreateDiagnose,
-    MostAwardedMovie,
+    SearchSchedule,
     MostAwardedPerson,
     MostGrossingMovie,
 },
@@ -160,7 +160,7 @@ export default {
         },
         {
           title: 'Agendas',
-          component: this.openMostAwardedMovieModal,
+          component: SearchSchedule,
         },
         {
           title: 'Especialidade',

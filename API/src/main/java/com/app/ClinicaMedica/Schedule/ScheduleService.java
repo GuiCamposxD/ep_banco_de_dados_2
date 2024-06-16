@@ -1,5 +1,6 @@
 package com.app.ClinicaMedica.Schedule;
 
+import Enum.WeekDays;
 import Util.FetchEntity;
 import com.app.ClinicaMedica.Doctor.Doctor;
 import com.app.ClinicaMedica.Doctor.DoctorRepository;
@@ -25,6 +26,10 @@ public class ScheduleService {
 
     public List<ScheduleDTO> getSchedulesByCrm(String crm) {
         return ScheduleDTO.converter(scheduleRepository.findByDoctorCrm(crm));
+    }
+
+    public List<ScheduleDTO> getSchedulesByCrmAndWeekDay(String crm, WeekDays weekDay) {
+        return ScheduleDTO.converter(scheduleRepository.findByDoctorCrmAndWeekDay(crm, weekDay));
     }
 
     @Transactional

@@ -37,11 +37,11 @@
             >
               <v-autocomplete
 								v-model="selectedDoctor"
-								label="Médicos"
+								label="Doutores(as)"
 								:clearable="true"
 								item-title="doctorName"
 								item-value="crm"
-								return-object
+								:return-object="true"
                 hide-details
 								:items="doctors"
 							/>
@@ -59,7 +59,7 @@
           <v-container>
             <v-row>
               <v-col
-                cols="10"
+                cols="8"
               >
                 <p><b>Crm:</b> {{ doctor.crm }}</p>
                 <p><b>Nome:</b> {{ doctor.doctorName }}</p>
@@ -80,6 +80,26 @@
                       color="#18435A"
                       icon="mdi-pencil"
                       v-bind="props"
+                      @click="openEditDoctorModal(doctor)"
+                    />
+                  </template>
+                </v-tooltip>
+              </v-col>
+
+              <v-col
+                class="d-flex align-center"
+              >
+                <v-tooltip
+                  text="Excluir Doutor"
+                  location="top"
+                >
+                  <template v-slot:activator="{ props }">
+                    <v-btn
+                      variant="flat"
+                      color="red"
+                      icon="mdi-delete"
+                      v-bind="props"
+                      @click="deleteDoctor(doctor)"
                     />
                   </template>
                 </v-tooltip>
@@ -90,17 +110,54 @@
 			</v-card-text>
 		</v-card>
 	</v-dialog>
+
+  <create-doctor
+    v-if="shouldEditDoctor"
+    :doctor="selectedDoctor"
+    :is-edit="shouldEditDoctor"
+    @close-modal="closeDoctorModal"
+  />
+
+  <v-snackbar
+    v-model="shouldShowSnackBar"
+    color="#FAC95F"
+    elevation="24"
+    :timeout="2000"
+    location="center"
+  >
+    <p>{{ snackBarMessage }}</p>
+
+    <template v-slot:actions>
+      <v-btn
+        color="pink"
+        variant="text"
+        @click="closeSnackbar"
+      >
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
 import axios from 'axios'
+import CreateDoctor from "@/components/Modals/CreateDoctor.vue";
 
 export default {
   name: 'SearchDoctor',
+  components: {
+    CreateDoctor,
+  },
+  emits: [
+    'closeModal',
+  ],
   data()  {
     return {
       selectedDoctor: null,
       doctors: [],
+      shouldEditDoctor: false,
+      shouldShowSnackBar: false,
+      snackBarMessage: '',
       doctorsTableheaders: [
         { title: 'Crm', key: 'crm' },
         { title: 'Nome', key: 'doctorName' },
@@ -110,41 +167,49 @@ export default {
     }
   },
   async mounted() {
-    const doctorsReponse = await axios.get('/doctors')
-		this.doctors = doctorsReponse.data
+    await this.getDoctors()
   },
-  // watch: {
-  //   selectedAward: {
-  //     async handler(award) {
-  //       if (!award) {
-  //         this.actors = []
-  //         this.movies = []
-  //         return
-  //       }
-  //
-  //       const reponseActors = await axios.get('/pessoa_indicada_premio', {
-  //         params: {
-  //           edicao_ano: award.edicao_ano,
-  //           edicao_nome_evento: award.edicao_nome_evento,
-  //           tipo: award.tipo,
-  //         },
-  //       })
-  //       this.actors = reponseActors.data
-  //
-  //       const reponseMovies = await axios.get('/filme_indicado_premio', {
-  //         params: {
-  //           edicao_ano: award.edicao_ano,
-  //           edicao_nome_evento: award.edicao_nome_evento,
-  //           tipo: award.tipo,
-  //         },
-  //       })
-  //       this.movies = reponseMovies.data
-  //     },
-  //   },
-  // },
+  watch: {
+    selectedDoctor: {
+      async handler(doctor) {
+        if(!doctor) {
+          const doctorsResponse = await axios.get('/doctors')
+          this.doctors = doctorsResponse.data
+          return
+        }
+
+        const doctorsResponse = await axios.get(`doctors/${doctor.crm}`)
+        this.doctors = [doctorsResponse.data]
+      },
+    },
+  },
   methods: {
     closeModal() {
 			this.$emit('closeModal')
+    },
+    closeDoctorModal() {
+      this.shouldEditDoctor = false
+    },
+    openEditDoctorModal(doctor) {
+      this.selectedDoctor = doctor
+      this.shouldEditDoctor = true
+    },
+    async getDoctors() {
+      const doctorsResponse = await axios.get('/doctors')
+      this.doctors = doctorsResponse.data
+    },
+    async deleteDoctor(doctor) {
+      try {
+        await axios.delete(`/doctors/${doctor.crm}`)
+
+        await this.getDoctors()
+
+        this.snackBarMessage = 'Doutor(a) excluido com sucesso'
+        this.shouldShowSnackBar = true
+      } catch (e) {
+        this.snackBarMessage = 'Falha ao excluir o(a) Doutor(a)'
+        this.shouldShowSnackBar = true
+      }
     },
   },
 }

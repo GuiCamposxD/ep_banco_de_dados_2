@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Set;
+
 @Getter
 @AllArgsConstructor
 public class DoctorUpdateDTO {
@@ -22,6 +24,8 @@ public class DoctorUpdateDTO {
     @NotNull(message = "Percentage is mandatory")
     @Positive(message = "Percentage must be a positive number")
     private Float percentage;
+
+    private Set<Long> idSpecialities;
 
     public void update(Doctor doctor) {
         doctor.setDoctorName(this.getDoctorName());

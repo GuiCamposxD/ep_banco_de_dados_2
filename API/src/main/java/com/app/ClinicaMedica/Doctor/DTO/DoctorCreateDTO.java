@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Set;
+
 @Getter
 @AllArgsConstructor
 public class DoctorCreateDTO {
@@ -25,7 +27,7 @@ public class DoctorCreateDTO {
     @Positive(message = "Percentage must be a positive number")
     private Float percentage;
 
-    private Long idSpeciality;
+    private Set<Long> idSpecialities;
 
     public Doctor converter() {
         Doctor doctor = new Doctor();
