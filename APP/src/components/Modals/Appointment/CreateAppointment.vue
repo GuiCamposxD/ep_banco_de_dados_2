@@ -2,7 +2,7 @@
 	<v-dialog
 		:model-value="true"
 		max-width="1000"
-		persistent
+		:persistent="true"
 	>
 		<v-card
       height="600"
@@ -13,7 +13,7 @@
 						<v-col
 							cols="11"
 						>
-							<h2>Cadastrar Consulta</h2>
+              {{isEdit ? 'Editar Consulta' : 'Cadastrar Consulta'}}
 						</v-col>
 
 						<v-col
@@ -42,6 +42,7 @@
                 hide-details
                 item-title="doctorName"
                 item-value="crm"
+                :return-object="true"
 								:clearable="true"
                 :items="doctors"
 							/>
@@ -113,7 +114,7 @@
                 label="Está pago?"
                 hide-details
                 :clearable="true"
-                :items="['Sim', 'Não']"
+                :items="isPaid"
               />
             </v-col>
 
@@ -159,9 +160,9 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreateMovie"
+                @click="handleCreateOrEditAppointment"
               >
-                Cadastrar Filme
+                {{isEdit ? 'Editar Consulta' : 'Cadastrar Consulta'}}
               </v-btn>
             </v-col>
           </v-row>
@@ -191,13 +192,19 @@
 	</v-dialog>
 </template>
 
+
+
 <script>
 import axios from 'axios'
 
 export default {
-	name: 'CreateAppointment',
-	data() {
-		return {
+  name: 'CreateAppointment',
+  props: {
+    appointment: Object,
+    isEdit: Boolean,
+  },
+  data() {
+    return {
       appointmentDoctor: null,
       appointmentPatient: null,
       appointmentDate: null,
@@ -210,6 +217,16 @@ export default {
       doctors: [],
       patients: [],
       specialities: [],
+      isPaid: [
+        {
+          title: 'Sim',
+          value: true,
+        },
+        {
+          title: 'Não',
+          value: false,
+        }
+      ],
       paymentMethods: [
         {
           title: 'Cartão de Credito',
@@ -224,20 +241,22 @@ export default {
           value: 'MONEY'
         },
       ],
-			shouldShowSnackBar: false,
-			snackBarMessage: '',
-		}
-	},
+      shouldShowSnackBar: false,
+      snackBarMessage: '',
+    }
+  },
   watch: {
-    async appointmentDoctor(crm) {
-      const responseExertSpecialities = await axios.get(`exert-specialities/${crm}`)
+    async appointmentDoctor(doctor) {
+      const responseExertSpecialities = await axios.get(`exert-specialities/${doctor.crm}`)
 
       if(responseExertSpecialities.data.length === 0) this.appointmentSpeciality = null
 
       this.specialities = responseExertSpecialities.data
     },
   },
-	async mounted() {
+  async mounted() {
+    this.loadAppointment()
+
     const [doctorsResponse, patientsResponse] = await Promise.all([
       axios.get('/doctors'),
       axios.get('/patients')
@@ -245,34 +264,77 @@ export default {
 
     this.doctors = doctorsResponse.data;
     this.patients = patientsResponse.data;
-	},
-	methods: {
-		closeModal() {
-			this.$emit('closeModal')
-		},
+  },
+  methods: {
+    closeModal() {
+      this.$emit('closeModal')
+    },
+    closeSnackbar() {
+      this.shouldShowSnackBar = false
+    },
     formatHour(hour) {
       return `${String(hour.hours).padStart(2, '0')}:${String(hour.minutes).padStart(2, '0')}:${String(hour.seconds).padStart(2, '0')}`
     },
-		async handleCreateMovie() {
+    convertHourToObject(hour) {
+      const timeParts = hour.split(':')
+
+      return {
+        hours: parseInt(timeParts[0], 10),
+        minutes: parseInt(timeParts[1], 10),
+        seconds: parseInt(timeParts[2], 10)
+      }
+    },
+    loadAppointment() {
+      if(this.appointment) {
+        this.appointmentDoctor = this.appointment.doctor
+        this.appointmentDate = this.appointment.date
+        this.appointmentPatient = this.appointment.patient
+        this.appointmentStartHour = this.convertHourToObject(this.appointment.startHour)
+        this.appointmentEndHour = this.convertHourToObject(this.appointment.endHour)
+        this.appointmentIsPaid = this.appointment.isPaid
+        this.appointmentPaidAmount = this.appointment.paidAmount
+        this.appointmentPaymentMethod = this.appointment.paymentMethod
+        this.appointmentSpeciality = this.appointment.speciality
+      }
+    },
+    async handleCreateOrEditAppointment() {
       try {
-        await axios.post('/appointments', {
-          crm: this.appointmentDoctor,
-          idPatient: this.appointmentPatient,
-          idSpeciality: this.appointmentSpeciality,
-          date: this.appointmentDate,
-          startHour: this.formatHour(this.appointmentStartHour),
-          endHour: this.formatHour(this.appointmentEndHour),
-          isPaid: Boolean(this.appointmentIsPaid),
-          paidAmount: parseFloat(this.appointmentPaidAmount),
-          paymentMethod: this.appointmentPaymentMethod,
-        })
-        this.snackBarMessage = 'Consulta cadastrada com sucesso!!!'
-        this.shouldShowSnackBar = true
+        if(this.isEdit) {
+          await axios.patch(`/appointments/${this.appointment.idAppointment}`, {
+            crm: this.appointmentDoctor.crm,
+            idPatient: this.appointmentPatient.idPatient,
+            idSpeciality: this.appointmentSpeciality.idSpeciality,
+            date: this.appointmentDate,
+            startHour: this.formatHour(this.appointmentStartHour),
+            endHour: this.formatHour(this.appointmentEndHour),
+            isPaid: Boolean(this.appointmentIsPaid),
+            paidAmount: parseFloat(this.appointmentPaidAmount),
+            paymentMethod: this.appointmentPaymentMethod,
+          })
+
+          this.snackBarMessage = 'Consulta editada com sucesso'
+          this.shouldShowSnackBar = true
+        } else {
+          await axios.post('/appointments', {
+            crm: this.appointmentDoctor.crm,
+            idPatient: this.appointmentPatient,
+            idSpeciality: this.appointmentSpeciality,
+            date: this.appointmentDate,
+            startHour: this.formatHour(this.appointmentStartHour),
+            endHour: this.formatHour(this.appointmentEndHour),
+            isPaid: Boolean(this.appointmentIsPaid),
+            paidAmount: parseFloat(this.appointmentPaidAmount),
+            paymentMethod: this.appointmentPaymentMethod,
+          })
+
+          this.snackBarMessage = 'Consulta cadastrada com sucesso'
+          this.shouldShowSnackBar = true
+        }
       } catch (e) {
         this.snackBarMessage = 'Erro ao cadastrar consulta, verifique os campos!'
         this.shouldShowSnackBar = true
       }
-		},
-	}
+    },
+  }
 }
 </script>

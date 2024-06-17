@@ -177,17 +177,16 @@ export default {
       return `${String(hour.hours).padStart(2, '0')}:${String(hour.minutes).padStart(2, '0')}:${String(hour.seconds).padStart(2, '0')}`
     },
     convertHourToObject(hour) {
-      const timeParts = hour.split(':');
+      const timeParts = hour.split(':')
 
       return {
         hours: parseInt(timeParts[0], 10),
         minutes: parseInt(timeParts[1], 10),
         seconds: parseInt(timeParts[2], 10)
-      };
+      }
     },
     loadSchedule() {
       if(this.schedule) {
-        console.log(this.schedule)
         this.idSchedule = this.schedule.idSchedule
         this.doctorCrm = this.schedule.doctor.crm
         this.startHour = this.convertHourToObject(this.schedule.startHour)
@@ -219,9 +218,9 @@ export default {
           this.shouldShowSnackBar = true
         }
       }catch (e) {
-          if(this.isEdit) this.snackBarMessage = 'Erro ao editar Agenda, verifique os campos!'
-          this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos!'
-          this.shouldShowSnackBar = true
+        if(this.isEdit) this.snackBarMessage = 'Erro ao editar Agenda, verifique os campos!'
+        else this.snackBarMessage = 'Erro ao cadsatrar Agenda, verifique os campos!'
+        this.shouldShowSnackBar = true
       }
 		},
 	}

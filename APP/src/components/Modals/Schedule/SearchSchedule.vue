@@ -2,7 +2,7 @@
 	<v-dialog
 		:model-value="true"
 		max-width="800"
-		persistent
+		:persistent="true"
 	>
 		<v-card>
 			<v-card-title>
@@ -36,11 +36,12 @@
               <v-autocomplete
                 v-model="selectedDoctor"
                 label="Doutores(as)"
-                :clearable="true"
                 item-title="doctorName"
                 item-value="crm"
-                :return-object="true"
                 hide-details
+                no-data-text="Nenhum doutor(a) encontrado(a)"
+                :return-object="true"
+                :clearable="true"
                 :items="doctors"
               />
             </v-col>
@@ -151,7 +152,7 @@
 
 <script>
 import axios from 'axios'
-import CreateSchedule from "@/components/Modals/CreateSchedule.vue"
+import CreateSchedule from "@/components/Modals/Schedule/CreateSchedule.vue"
 import weekDays from "@/enums/weekDays"
 
 export default {
@@ -161,6 +162,19 @@ export default {
   ],
   components: {
     CreateSchedule
+  },
+  data()  {
+    return {
+      selectedSchedule: null,
+      selectedDoctor: null,
+      shouldEditSchedule: false,
+      selectedWeekDay: null,
+      weekDays,
+      doctors: [],
+      schedules: [],
+      shouldShowSnackBar: false,
+      snackBarMessage: '',
+    }
   },
   watch: {
     selectedDoctor: {
@@ -185,19 +199,6 @@ export default {
         await this.getSchedulesByWeekDay()
       },
     },
-  },
-  data()  {
-    return {
-      selectedSchedule: null,
-      selectedDoctor: null,
-      shouldEditSchedule: false,
-      selectedWeekDay: null,
-      weekDays,
-      doctors: [],
-      schedules: [],
-      shouldShowSnackBar: false,
-      snackBarMessage: '',
-    }
   },
   async mounted() {
     await this.getDoctors()

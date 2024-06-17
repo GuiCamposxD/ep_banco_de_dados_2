@@ -3,6 +3,7 @@ package com.app.ClinicaMedica.Diagnostic;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticCreateDTO;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticDTO;
 import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticUpdateDTO;
+import com.app.ClinicaMedica.Diagnostic.DTO.DiagnosticWithDiseasesDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,11 @@ public class DiagnosticController {
     @GetMapping
     public ResponseEntity<List<DiagnosticDTO>> getDiagnostics() {
         return ResponseEntity.ok(diagnosticService.getDiagnostics());
+    }
+
+    @GetMapping("/patient/{idPatient}")
+    public List<DiagnosticWithDiseasesDTO> getDiagnosticsByPatient(@PathVariable Long idPatient) {
+        return diagnosticService.getDiagnosticsByPatientId(idPatient);
     }
 
     @PostMapping

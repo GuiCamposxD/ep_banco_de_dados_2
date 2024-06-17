@@ -19,7 +19,7 @@ public class SpecialityService {
     }
 
     public List<SpecialityDTO> getSpecialities() {
-        return SpecialityDTO.converter(this.specialityRepository.findAll());
+        return SpecialityDTO.converter(this.specialityRepository.findAllByOrderByIndexAsc());
     }
 
     public SpecialityDTO addNewSpeciality(SpecialityCreateDTO form) {

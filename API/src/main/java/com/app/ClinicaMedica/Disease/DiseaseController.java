@@ -27,7 +27,6 @@ public class DiseaseController {
 
     @PostMapping
     public ResponseEntity<DiseaseDTO> registerDisease(@Valid @RequestBody DiseaseCreateDTO form) {
-        System.out.println(form);
         return ResponseEntity.ok(diseaseService.addNewDisease(form));
     }
 

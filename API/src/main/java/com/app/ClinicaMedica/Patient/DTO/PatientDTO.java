@@ -33,7 +33,7 @@ public class PatientDTO {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private final Genders genders;
+    private final Genders gender;
 
     public PatientDTO(Patient patient) {
         this.idPatient = patient.getIdPatient();
@@ -42,7 +42,7 @@ public class PatientDTO {
         this.patientPhone = patient.getPatientPhone();
         this.address = patient.getAddress();
         this.age = patient.getAge();
-        this.genders = patient.getGender();
+        this.gender = patient.getGender();
     }
 
     public static List<PatientDTO> converter(List<Patient> patients) {

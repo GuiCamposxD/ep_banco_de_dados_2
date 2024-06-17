@@ -40,6 +40,14 @@ public class AppointmentService {
         return AppointmentDTO.converter(appointmentRepository.findAll());
     }
 
+    public List<AppointmentDTO> getAppointmentsByDoctor(String crm) {
+        return AppointmentDTO.converter(appointmentRepository.findByDoctorCrm(crm));
+    }
+
+    public List<AppointmentDTO> getAppointmentsByPatient(Long idPatient) {
+        return AppointmentDTO.converter(appointmentRepository.findByPatientIdPatient(idPatient));
+    }
+
     @Transactional
     public AppointmentDTO addNewAppointment(AppointmentCreateDTO form) {
         Doctor doctor = FetchEntity.fetchEntity(form.getCrm(), this.doctorRepository);

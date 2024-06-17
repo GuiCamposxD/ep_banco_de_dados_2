@@ -65,8 +65,10 @@
 							<v-autocomplete
 								v-model="diagnoseAppointment"
 								label="Consulta"
-                :item-title="getAppointmentItem"
                 item-value="idAppointment"
+                no-data-text="Nenhuma consulta encontrada"
+                :return-object="true"
+                :item-title="getAppointmentItem"
 								:clearable="true"
 								:items="appointments"
 							/>
@@ -74,10 +76,11 @@
 
             <v-col>
               <v-autocomplete
-                v-model="diagnoseDisease"
+                v-model="diagnoseDiseases"
                 label="Doença"
                 item-title="diseaseName"
                 item-value="idDisease"
+                :multiple="true"
                 :clearable="true"
                 :items="diseases"
               />
@@ -146,7 +149,7 @@ export default {
 		return {
       appointments: [],
       diseases: [],
-      diagnoseDisease: null,
+      diagnoseDiseases: null,
       diagnoseAppointment: null,
       diagnosePrescriptionMedicines: null,
       diagnoseRecommendedTreatment: null,
@@ -155,7 +158,13 @@ export default {
 			snackBarMessage: '',
 		}
 	},
+  props: {
+    diagnose: Object,
+    isEdit: Boolean,
+  },
 	async mounted() {
+    this.loadDiagnostics()
+
 		const [appointmentsResponse, diseaseResponse] = await Promise.all([
       axios.get('/appointments'),
       axios.get('/diseases'),
@@ -169,7 +178,17 @@ export default {
 			this.$emit('closeModal')
 		},
     getAppointmentItem(item) {
-      return `${item.startHour} - ${item.endHour} - ${item.date} - ${item.doctor.doctorName}`
+      return `${item.startHour} - ${item.endHour} - ${item.date} | ${item.doctor.doctorName}`
+    },
+    loadDiagnostics() {
+      if(this.diagnose) {
+        console.log(this.diagnose)
+        this.diagnoseDiseases = this.diagnose.diseases.map((disease) => disease.idDisease)
+        this.diagnoseAppointment = this.diagnose.appointment
+        this.diagnosePrescriptionMedicines = this.diagnose.prescriptionMedicines
+        this.diagnoseRecommendedTreatment = this.diagnose.recommendedTreatment
+        this.diagnoseObservations = this.diagnose.observations
+      }
     },
 		async handleCreateDiagnose() {
 			try {
@@ -178,7 +197,7 @@ export default {
           prescriptionMedicines: this.diagnosePrescriptionMedicines,
           observations: this.diagnoseObservations,
           idAppointment: this.diagnoseAppointment.idAppointment,
-          idDisease: this.diagnoseDisease,
+          idDiseases: this.diagnoseDiseases,
         })
 
         this.snackBarMessage = 'Diagnóstico cadastrado com sucesso'

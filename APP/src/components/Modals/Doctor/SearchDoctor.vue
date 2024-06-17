@@ -38,11 +38,12 @@
               <v-autocomplete
 								v-model="selectedDoctor"
 								label="Doutores(as)"
-								:clearable="true"
 								item-title="doctorName"
 								item-value="crm"
-								:return-object="true"
                 hide-details
+                no-data-text="Nenhum doutor(a) encontrado(a)"
+								:return-object="true"
+								:clearable="true"
 								:items="doctors"
 							/>
             </v-col>
@@ -141,7 +142,7 @@
 
 <script>
 import axios from 'axios'
-import CreateDoctor from "@/components/Modals/CreateDoctor.vue";
+import CreateDoctor from "@/components/Modals/Doctor/CreateDoctor.vue";
 
 export default {
   name: 'SearchDoctor',

@@ -59,7 +59,7 @@
               <h2
                 class="text-center"
               >
-                Consultar
+                Consulta
               </h2>
             </v-col>
           </v-row>
@@ -91,24 +91,26 @@
 </template>
 
 <script>
-import SearchDoctor from '@/components/Modals/SearchDoctor.vue'
-import BestActorAward from '@/components/Modals/BestActorAwards.vue'
-import CreateSchedule from '@/components/Modals/CreateSchedule.vue'
-import CreateSpeciality from '@/components/Modals/CreateSpeciality.vue'
-import CreatePatient from '@/components/Modals/CreatePatient.vue'
-import CreateAppointment from '@/components/Modals/CreateAppointment.vue'
-import CreateDisease from '@/components/Modals/CreateDisease.vue'
-import CreateDoctor from '@/components/Modals/CreateDoctor.vue'
-import CreateDiagnose from '@/components/Modals/CreateDiagnose.vue'
-import SearchSchedule from '@/components/Modals/SearchSchedule.vue'
-import MostAwardedPerson from '@/components/Modals/MostAwardedPerson.vue'
-import MostGrossingMovie from '@/components/Modals/MostGrossingMovie.vue'
+import SearchDoctor from '@/components/Modals/Doctor/SearchDoctor.vue'
+import SearchPatient from '@/components/Modals/Patient/SearchPatient.vue'
+import CreateSchedule from '@/components/Modals/Schedule/CreateSchedule.vue'
+import CreateSpeciality from '@/components/Modals/Speciality/CreateSpeciality.vue'
+import CreatePatient from '@/components/Modals/Patient/CreatePatient.vue'
+import CreateAppointment from '@/components/Modals/Appointment/CreateAppointment.vue'
+import CreateDisease from '@/components/Modals/Disease/CreateDisease.vue'
+import CreateDoctor from '@/components/Modals/Doctor/CreateDoctor.vue'
+import CreateDiagnose from '@/components/Modals/Diagnose/CreateDiagnose.vue'
+import SearchSchedule from '@/components/Modals/Schedule/SearchSchedule.vue'
+import SearchSpeciality from '@/components/Modals/Speciality/SearchSpeciality.vue'
+import SearchAppointment from '@/components/Modals/Appointment/SearchAppointment.vue'
+import SearchDisease from '@/components/Modals/Disease/SearchDisease.vue'
+import SearchDiagnose from '@/components/Modals/Diagnose/SearchDiagnose.vue'
 
 export default {
   name: 'AppHome',
   components: {
     SearchDoctor,
-    BestActorAward,
+    SearchPatient,
     CreateSchedule,
     CreateSpeciality,
     CreatePatient,
@@ -117,8 +119,10 @@ export default {
     CreateDoctor,
     CreateDiagnose,
     SearchSchedule,
-    MostAwardedPerson,
-    MostGrossingMovie,
+    SearchSpeciality,
+    SearchAppointment,
+    SearchDisease,
+    SearchDiagnose,
 },
   data() {
     return {
@@ -160,27 +164,27 @@ export default {
         },
         {
           title: 'Agendas',
-          component: SearchSchedule,
+          component: 'SearchSchedule',
         },
         {
           title: 'Especialidade',
-          component: this.openMostGrossingMovieModal,
+          component: 'SearchSpeciality',
         },
         {
           title: 'Paciente',
-          component: this.openBestActorsAwardsModal,
+          component: 'SearchPatient',
         },
         {
           title: 'Consulta',
-          component: this.openAwardsModal,
+          component: 'SearchAppointment',
         },
         {
           title: 'Doença',
-          component: this.openDiseaseModal,
+          component: 'SearchDisease',
         },
         {
           title: 'Diagnóstico',
-          component: this.openDiagnoseModal,
+          component: 'SearchDiagnose',
         },
       ]
     }

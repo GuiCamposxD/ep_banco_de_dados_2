@@ -12,8 +12,8 @@
 							cols="11"
 						>
 							<h2>
-							Cadastrar Paciente
-						</h2>
+                {{isEdit ? 'Editar Paciente' : 'Cadastrar Paciente'}}
+              </h2>
 						</v-col>
 
 						<v-col
@@ -46,6 +46,7 @@
 							<v-text-field
 								v-model="patientCpf"
 								label="CPF"
+                :disabled="isEdit"
 								:clearable="true"
 							/>
 						</v-col>
@@ -107,9 +108,9 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreateEvent"
+                @click="handleCreatePatientOrEdit"
               >
-                Cadastrar Evento
+                {{isEdit ? 'Editar Paciente' : 'Cadastrar Paciente'}}
               </v-btn>
             </v-col>
           </v-row>
@@ -145,8 +146,13 @@ import axios from 'axios'
 
 export default {
 	name: 'CreatePatient',
+  props: {
+    patient: Object,
+    isEdit: Boolean,
+  },
 	emits: [
     'closeModal',
+    'updatePatients',
   ],
 	data() {
 		return {
@@ -170,30 +176,58 @@ export default {
 			shouldShowSnackBar: false,
 		}
 	},
+  mounted() {
+    this.loadPatient()
+  },
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
 		},
-		async handleCreateEvent() {
+    closeSnackbar() {
+      this.shouldShowSnackBar = false
+    },
+    loadPatient() {
+      if(this.patient) {
+        this.patientName = this.patient.patientName
+        this.patientCpf = this.patient.cpf
+        this.patientPhone = this.patient.patientPhone
+        this.patientAddress = this.patient.address
+        this.patientAge = this.patient.age
+        this.patientGender= this.patient.gender
+      }
+    },
+		async handleCreatePatientOrEdit() {
       try {
-        await axios.post('/patients', {
-          patientName: this.patientName,
-          cpf: this.patientCpf,
-          patientPhone: this.patientPhone,
-          address: this.patientAddress,
-          age: parseInt(this.patientAge),
-          gender: this.patientGender,
-        })
+        if(this.isEdit) {
+          await axios.patch(`/patients/${this.patient.idPatient}`, {
+            patientName: this.patientName,
+            cpf: this.patientCpf,
+            patientPhone: this.patientPhone,
+            address: this.patientAddress,
+            age: parseInt(this.patientAge),
+            gender: this.patientGender,
+          })
 
-        this.snackBarMessage = 'Paciente cadastrado com sucesso'
-        this.shouldShowSnackBar = true
+          this.snackBarMessage = 'Paciente atualizado com sucesso'
+          this.shouldShowSnackBar = true
+          this.$emit('updatePatients')
+        } else {
+          await axios.post('/patients', {
+            patientName: this.patientName,
+            cpf: this.patientCpf,
+            patientPhone: this.patientPhone,
+            address: this.patientAddress,
+            age: parseInt(this.patientAge),
+            gender: this.patientGender,
+          })
+
+          this.snackBarMessage = 'Paciente cadastrado com sucesso'
+          this.shouldShowSnackBar = true
+        }
       } catch (e) {
         this.snackBarMessage = 'Erro ao cadastrar usuário, verifique os campos!'
         this.shouldShowSnackBar = true
       }
-		},
-		closeSnackbar() {
-			this.shouldShowSnackBar = false
 		},
 	}
 }

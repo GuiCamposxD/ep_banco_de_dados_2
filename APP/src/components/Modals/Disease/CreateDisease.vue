@@ -1,7 +1,7 @@
 <template>
 	<v-dialog
+		max-width="750"
 		:model-value="true"
-		max-width="800"
 		:persistent="true"
 	>
 		<v-card>
@@ -11,9 +11,10 @@
 						<v-col
 							cols="11"
 						>
-							<h2>
-							Cadastrar Especialidade
+						<h2>
+              {{isEdit ? 'Editar Doença' : 'Cadastrar Doença'}}
 						</h2>
+
 						</v-col>
 
 						<v-col
@@ -36,17 +37,9 @@
 					<v-row>
 						<v-col>
 							<v-text-field
-								v-model="specialityName"
-								label="Nome"
-								:clearable="true"
-							/>
-						</v-col>
-
-						<v-col>
-							<v-text-field
-								v-model="specialityIndex"
-								label="Indíce"
-								return-object
+								v-model="diseaseName"
+								label="Nome da Doença"
+                :clearable="true"
 							/>
 						</v-col>
 					</v-row>
@@ -72,9 +65,9 @@
               <v-btn
                 variant="flat"
                 color="#18435A"
-                @click="handleCreateEdition"
+                @click="handleCreateOrEditDisease"
               >
-                Cadastrar Edição
+                {{isEdit ? 'Editar Doença' : 'Cadastrar Doença'}}
               </v-btn>
             </v-col>
           </v-row>
@@ -102,46 +95,59 @@
 			</template>
 		</v-snackbar>
 	</v-dialog>
-
 </template>
 
 <script>
 import axios from 'axios'
 
 export default {
-	name: 'CreateSpeciality',
-	emits: [
-		'closeModal',
-	],
+	name: 'CreateDisease',
+  props: {
+    disease: Object,
+    isEdit: Boolean,
+  },
 	data() {
 		return {
-      specialityName: null,
-      specialityIndex: null,
-      shouldShowSnackBar: false,
-      snackBarMessage: null,
+			diseaseName: null,
+			shouldShowSnackBar: false,
+			snackBarMessage: '',
 		}
 	},
+  mounted() {
+    this.loadDisease()
+  },
 	methods: {
 		closeModal() {
 			this.$emit('closeModal')
 		},
-		async handleCreateEdition() {
+    closeSnackbar() {
+      this.shouldShowSnackBar = false
+    },
+    loadDisease() {
+      this.diseaseName = this.disease.diseaseName
+    },
+		async handleCreateOrEditDisease() {
       try {
-        await axios.post('/specialities', {
-          specialityName: this.specialityName,
-          index: parseInt(this.specialityIndex),
-        })
+        if(this.isEdit) {
+          await axios.patch(`/diseases/${this.disease.idDisease}`, {
+            diseaseName: this.diseaseName
+          })
 
-        this.snackBarMessage = 'Edição cadastrada com sucesso'
-        this.shouldShowSnackBar = true
+          this.snackBarMessage = 'Doença atualizada com sucesso'
+          this.shouldShowSnackBar = true
+        } else {
+          await axios.post('/diseases', {
+            diseaseName: this.diseaseName
+          })
+
+          this.snackBarMessage = 'Doença cadastrada com sucesso'
+          this.shouldShowSnackBar = true
+        }
       } catch (e) {
-        this.snackBarMessage = 'Erro ao cadsatrar Edição, verifique os campos!'
+        this.snackBarMessage = 'Erro ao cadastrar doença, verifique os campos!'
         this.shouldShowSnackBar = true
       }
 		},
-    closeSnackbar() {
-      this.shouldShowSnackBar = false
-    }
 	}
 }
 </script>

@@ -25,6 +25,16 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointments());
     }
 
+    @GetMapping("/doctor/{crm}")
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByDoctor(@PathVariable("crm") String crm) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByDoctor(crm));
+    }
+
+    @GetMapping("/patient/{idPatient}")
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("idPatient") Long idPatient) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByPatient(idPatient));
+    }
+
     @PostMapping
     public ResponseEntity<AppointmentDTO> registerAppointment(@Valid @RequestBody AppointmentCreateDTO form) {
         return ResponseEntity.ok(appointmentService.addNewAppointment(form));
