@@ -18,23 +18,26 @@ public class AppointmentDontExistValidator implements ConstraintValidator<Appoin
 
     @Override
     public boolean isValid(Appointment appointment, ConstraintValidatorContext context) {
-        LocalDate date_appointment = appointment.getDate();
-        LocalTime start_hour_appointment = appointment.getStartHour();
-        LocalTime end_hour_appointment = appointment.getEndHour();
+        LocalDate dateAppointment = appointment.getDate();
+        LocalTime startHourAppointment = appointment.getStartHour();
+        LocalTime endHourAppointment = appointment.getEndHour();
 
         Doctor doctor = appointment.getDoctor();
         Set<Appointment> appointmentList = doctor.getAppointments();
 
-        for (Appointment a:appointmentList){
-            if (a.getStartHour().equals(start_hour_appointment)
-                || a.getEndHour().equals(end_hour_appointment)
-                || a.getDate().equals(date_appointment)){
+        for (Appointment a : appointmentList) {
+            LocalDate existingDate = a.getDate();
+            LocalTime existingStartHour = a.getStartHour();
+            LocalTime existingEndHour = a.getEndHour();
+
+            if (existingDate.equals(dateAppointment)) {
+                boolean isOverlapping = startHourAppointment.isBefore(existingEndHour) && endHourAppointment.isAfter(existingStartHour);
+                if (isOverlapping) {
                     return false;
+                }
             }
         }
 
         return true;
-
-
     }
 }
