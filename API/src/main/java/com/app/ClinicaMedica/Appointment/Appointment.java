@@ -2,6 +2,7 @@ package com.app.ClinicaMedica.Appointment;
 
 import Enum.PaymentMethods;
 import com.app.ClinicaMedica.Constraints.AppointmentDontExist;
+import com.app.ClinicaMedica.Constraints.AppointmentTimeInSchedule;
 import com.app.ClinicaMedica.Constraints.StartHourBeforeEndHour;
 import com.app.ClinicaMedica.Diagnostic.Diagnostic;
 import com.app.ClinicaMedica.Doctor.Doctor;
@@ -23,6 +24,7 @@ import java.util.Set;
 @NoArgsConstructor
 @StartHourBeforeEndHour
 @AppointmentDontExist
+@AppointmentTimeInSchedule
 public class Appointment implements TimeInterval {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "appointment_sequence")
